@@ -5,6 +5,10 @@ import 'package:google_fonts/google_fonts.dart';
 Color primary = const Color(0xff6699CC);
 Color background = const Color(0xff66CCFF);
 Color whiteColor = const Color(0xffFFFFFF);
+Color redColor = const Color(0xffFF4854);
+Color buttonActiveColor = const Color(0xff0099FF);
+Color buttonDisableColor = const Color(0xff6D6D6D);
+
 
 
 //TextStyle
@@ -29,6 +33,7 @@ TextStyle greenTextStyle = GoogleFonts.poppins(
 );
 
 //font weight atau ketebalan huruf
+FontWeight superlight = FontWeight.w100;
 FontWeight light = FontWeight.w300;
 FontWeight reguler = FontWeight.w400;
 FontWeight medium = FontWeight.w500;

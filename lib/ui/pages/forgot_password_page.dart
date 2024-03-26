@@ -1,10 +1,9 @@
-import 'package:apsensi_mobile/ui/pages/forgot_password_page.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:apsensi_mobile/shared/theme.dart';
 
-class LoginPage extends StatelessWidget {
-  const LoginPage({super.key});
+import '../../shared/theme.dart';
+
+class ForgotPage extends StatelessWidget {
+  const ForgotPage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -26,9 +25,22 @@ class LoginPage extends StatelessWidget {
               ),
             ),
           ),
+          Container(
+            width: 150,
+            height: 47,
+            margin: const EdgeInsets.only(
+              top: 20,
+              bottom: 100,
+            ),
+            decoration: const BoxDecoration(
+              image: DecorationImage(
+                image: AssetImage('assets/login/logo_forgot.png'),
+              ),
+            ),
+          ),
           Text(
             textAlign: TextAlign.center,
-            'Login',
+            'Lupa Password',
             style: blackTextStyle.copyWith(
               fontSize: 27,
               fontWeight: black,
@@ -36,6 +48,26 @@ class LoginPage extends StatelessWidget {
           ),
           const SizedBox(
             height: 30,
+          ),
+          Text(
+            textAlign: TextAlign.center,
+            'Jangan khawatir, kami akan mengirimkan petunjuk penyetelan ulang sandi kepada Anda.',
+            style: blackTextStyle.copyWith(
+              fontSize: 14,
+              fontWeight: superlight,
+            ),
+          ),
+          const SizedBox(
+            height: 20,
+          ),
+          Text(
+            textAlign: TextAlign.left,
+            '*Pastikan email yang anda masukkan aktif',
+            style: blackTextStyle.copyWith(
+              fontSize: 11,
+              fontWeight: superlight,
+              color: Colors.red
+            ),
           ),
           Container(
             padding: const EdgeInsets.all(22),
@@ -62,49 +94,18 @@ class LoginPage extends StatelessWidget {
                     ),
                     TextFormField(
                       decoration: const InputDecoration(
-                          // border: OutlineInputBorder(
-                          //   borderRadius: BorderRadius.circular(14)
-                          // ),
+                        // border: OutlineInputBorder(
+                        //   borderRadius: BorderRadius.circular(14)
+                        // ),
                           contentPadding: EdgeInsets.all(4)),
                     )
                   ],
                 ),
 
-                // PASSWORD INPUT
 
-                const SizedBox(
-                  height: 16,
-                ),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'Password',
-                      style: blackTextStyle.copyWith(
-                        fontWeight: medium,
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 8,
-                    ),
-                    TextFormField(
-                      obscureText: true,
-                      decoration: const InputDecoration(
-                          // border: OutlineInputBorder(
-                          //     borderRadius: BorderRadius.circular(14)
-                          // ),
-                          contentPadding: EdgeInsets.all(4)),
-                    )
-                  ],
-                ),
                 const SizedBox(
                   height: 8,
                 ),
-
-                Align(
-                    alignment: Alignment.centerRight,
-                    child: Text("Forgot Password?",
-                    style: blueTextStyle,),),
 
                 const SizedBox(
                   height: 8,
@@ -113,23 +114,15 @@ class LoginPage extends StatelessWidget {
                 SizedBox(
                   width: double.infinity,
                   height: 50,
-                  child: TextButton(onPressed: () {
-                    Navigator.of(context).pop();
-                    Navigator.of(context).push(
-                      MaterialPageRoute(builder: (context){
-                        return const ForgotPage();
-                      },
+                  child: TextButton(onPressed: () {},
+                    style: TextButton.styleFrom(
+                      backgroundColor: primary,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(56),
                       ),
-                    );
-                  },
-                  style: TextButton.styleFrom(
-                    backgroundColor: buttonActiveColor,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(56),
                     ),
-                  ),
                     child: Text(
-                      'Login',
+                      'Confirm',
                       style: whiteTextStyle.copyWith(
                         fontSize: 16,
                         fontWeight: semibold,
