@@ -100,11 +100,20 @@ class LoginPage extends StatelessWidget {
                 const SizedBox(
                   height: 8,
                 ),
-
-                Align(
+                GestureDetector(
+                  onTap: () {
+                    Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) => const ForgotPage(),
+                    ));
+                  },
+                  child: Align(
                     alignment: Alignment.centerRight,
-                    child: Text("Forgot Password?",
-                    style: blueTextStyle,),),
+                    child: Text(
+                      "Forgot Password?",
+                      style: blueTextStyle,
+                    ),
+                  ),
+                ),
 
                 const SizedBox(
                   height: 8,
@@ -113,21 +122,23 @@ class LoginPage extends StatelessWidget {
                 SizedBox(
                   width: double.infinity,
                   height: 50,
-                  child: TextButton(onPressed: () {
-                    Navigator.of(context).pop();
-                    Navigator.of(context).push(
-                      MaterialPageRoute(builder: (context){
-                        return const ForgotPage();
-                      },
+                  child: TextButton(
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) {
+                            return const ForgotPage();
+                          },
+                        ),
+                      );
+                    },
+                    style: TextButton.styleFrom(
+                      backgroundColor: buttonActiveColor,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(56),
                       ),
-                    );
-                  },
-                  style: TextButton.styleFrom(
-                    backgroundColor: buttonActiveColor,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(56),
                     ),
-                  ),
                     child: Text(
                       'Login',
                       style: whiteTextStyle.copyWith(
@@ -137,7 +148,6 @@ class LoginPage extends StatelessWidget {
                     ),
                   ),
                 )
-
               ],
             ),
           )
