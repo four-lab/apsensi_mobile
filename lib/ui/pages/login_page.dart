@@ -1,4 +1,5 @@
 import 'package:apsensi_mobile/ui/pages/forgot_password_page.dart';
+import 'package:apsensi_mobile/ui/pages/home_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:apsensi_mobile/shared/theme.dart';
@@ -102,9 +103,14 @@ class LoginPage extends StatelessWidget {
                 ),
                 GestureDetector(
                   onTap: () {
-                    Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => const ForgotPage(),
-                    ));
+                    // Navigator.of(context).pop();
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) {
+                          return const ForgotPage();
+                        },
+                      ),
+                    );
                   },
                   child: Align(
                     alignment: Alignment.centerRight,
@@ -124,11 +130,11 @@ class LoginPage extends StatelessWidget {
                   height: 50,
                   child: TextButton(
                     onPressed: () {
-                      Navigator.of(context).pop();
+                      // Navigator.of(context).pop();
                       Navigator.of(context).push(
                         MaterialPageRoute(
                           builder: (context) {
-                            return const ForgotPage();
+                            return const HomePage();
                           },
                         ),
                       );

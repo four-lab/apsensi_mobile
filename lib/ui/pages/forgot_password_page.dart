@@ -17,7 +17,7 @@ class ForgotPage extends StatelessWidget {
             height: 47,
             margin: const EdgeInsets.only(
               top: 100,
-              bottom: 100,
+              bottom: 10,
             ),
             decoration: const BoxDecoration(
               image: DecorationImage(
@@ -29,8 +29,8 @@ class ForgotPage extends StatelessWidget {
             width: 150,
             height: 47,
             margin: const EdgeInsets.only(
-              top: 20,
-              bottom: 100,
+              top: 10,
+              bottom: 10,
             ),
             decoration: const BoxDecoration(
               image: DecorationImage(
