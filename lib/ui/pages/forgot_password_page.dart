@@ -78,7 +78,7 @@ class ForgotPage extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // EMAIL INPUT
+                // EMAIL INPUT UNTUK FORGOT PASSWORD
 
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
