@@ -33,11 +33,11 @@ class HomePage extends StatelessWidget {
             items: [
               BottomNavigationBarItem(
                 icon: Image.asset(
-                  'assets/navbar/kalender.png',
+                  'assets/navbar/home.png',
                   width: 24,
                   color: buttonActiveColor,
                 ),
-                label: 'Kalender',
+                label: 'Home',
               ),
               BottomNavigationBarItem(
                 icon: Image.asset(
@@ -48,10 +48,10 @@ class HomePage extends StatelessWidget {
               ),
               BottomNavigationBarItem(
                 icon: Image.asset(
-                  'assets/navbar/presensi.png',
+                  'assets/navbar/kalender.png',
                   width: 24,
                 ),
-                label: 'Presensi',
+                label: 'Kalendar',
               ),
               BottomNavigationBarItem(
                 icon: Image.asset(
@@ -67,7 +67,7 @@ class HomePage extends StatelessWidget {
         backgroundColor: buttonActiveColor,
         shape: const CircleBorder(),
         child: Image.asset(
-          'assets/navbar/home.png',
+          'assets/navbar/presensi.png',
           width: 24,
         ),
       ),
