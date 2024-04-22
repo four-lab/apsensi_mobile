@@ -7,7 +7,7 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: whiteColor,
+      backgroundColor: transparentBackground,
       bottomNavigationBar: BottomAppBar(
         color: whiteColor,
         shape: const CircularNotchedRectangle(),
@@ -72,6 +72,68 @@ class HomePage extends StatelessWidget {
         ),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+      body: ListView(
+        padding: const EdgeInsetsDirectional.symmetric(
+          horizontal: 34,
+        ),
+        children: [
+          buildProfile(),
+        ],
+      ),
+    );
+  }
+
+  Widget buildProfile() {
+    return Container(
+      margin: const EdgeInsets.only(
+        top: 40,
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                'Hello,',
+                style: whiteTextStyle.copyWith(
+                  fontSize: 19,
+                  fontWeight: bold,
+                ),
+              ),
+              const SizedBox(
+                height: 2,
+              ),
+              Text(
+                'Irsyadul Ibad',
+                style: whiteTextStyle.copyWith(
+                  fontSize: 19,
+                  fontWeight: bold,
+                ),
+              ),
+              const SizedBox(
+                height: 2,
+              ),
+              Text(
+                '3456245678',
+                style: whiteTextStyle.copyWith(
+                  fontSize: 10,
+                  fontWeight: semibold,
+                ),
+              ),
+            ],
+          ),
+          Container(
+            width: 35,
+            height: 35,
+            decoration: const BoxDecoration(
+              shape: BoxShape.circle,
+              image: DecorationImage(
+                  image: AssetImage('assets/home/profil_picture.png')),
+            ),
+          )
+        ],
+      ),
     );
   }
 }
