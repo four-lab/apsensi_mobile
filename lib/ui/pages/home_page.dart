@@ -78,6 +78,7 @@ class HomePage extends StatelessWidget {
         ),
         children: [
           buildProfile(),
+          buildCardStatusPresensi(),
         ],
       ),
     );
@@ -133,6 +134,20 @@ class HomePage extends StatelessWidget {
             ),
           )
         ],
+      ),
+    );
+  }
+
+  Widget buildCardStatusPresensi() {
+    return Container(
+      width: double.infinity,
+      height: 149,
+      margin: const EdgeInsets.only(
+        top: 26,
+      ),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(10),
+        color: Colors.white,
       ),
     );
   }
