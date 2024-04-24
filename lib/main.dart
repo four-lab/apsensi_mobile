@@ -1,3 +1,5 @@
+import 'package:apsensi_mobile/ui/pages/calendar_page.dart';
+import 'package:apsensi_mobile/ui/pages/jadwal_page.dart';
 import 'package:apsensi_mobile/ui/pages/login_page.dart';
 import 'package:flutter/material.dart';
 
@@ -8,10 +10,14 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
+    return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: LoginPage(),
+      // home: LoginPage(),
+      routes: {
+        '/': (context) => const LoginPage(),
+        '/calendar': (context) => const CalendarPage(),
+        '/jadwal': (context) => JadwalPage(),
+      },
     );
   }
 }
-

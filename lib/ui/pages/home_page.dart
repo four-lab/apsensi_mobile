@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:apsensi_mobile/shared/theme.dart';
+import 'jadwal_page.dart';
+import 'calendar_page.dart';
+import 'perizinan_page.dart';
 
 class HomePage extends StatelessWidget {
-  const HomePage({super.key});
+  const HomePage({Key? key});
 
   @override
   Widget build(BuildContext context) {
@@ -15,52 +18,86 @@ class HomePage extends StatelessWidget {
         notchMargin: 6,
         elevation: 0,
         child: BottomNavigationBar(
-            type: BottomNavigationBarType.fixed,
-            backgroundColor: whiteColor,
-            elevation: 0,
-            selectedItemColor: buttonActiveColor,
-            unselectedItemColor: buttonDisableColor,
-            showSelectedLabels: true,
-            showUnselectedLabels: true,
-            selectedLabelStyle: blueTextStyle.copyWith(
-              fontSize: 12,
-              fontWeight: medium,
+          type: BottomNavigationBarType.fixed,
+          backgroundColor: whiteColor,
+          elevation: 0,
+          selectedItemColor: buttonActiveColor,
+          unselectedItemColor: buttonDisableColor,
+          showSelectedLabels: true,
+          showUnselectedLabels: true,
+          selectedLabelStyle: blueTextStyle.copyWith(
+            fontSize: 12,
+            fontWeight: medium,
+          ),
+          unselectedLabelStyle: blackTextStyle.copyWith(
+            fontSize: 12,
+            fontWeight: medium,
+          ),
+          currentIndex:
+              0, // Menandakan item terpilih, dalam hal ini indeks 0 untuk "Home"
+          onTap: (index) {
+            if (index == 1) {
+              // Jika item "Jadwal" diklik, pindah ke halaman Jadwal tanpa animasi
+              Navigator.pushReplacement(
+                context,
+                PageRouteBuilder(
+                  pageBuilder: (_, __, ___) => JadwalPage(),
+                  transitionsBuilder: (_, __, ___, child) => child,
+                ),
+              );
+            } else if (index == 2) {
+              // Jika item "Kalendar" diklik, pindah ke halaman Kalendar tanpa animasi
+              Navigator.pushReplacement(
+                context,
+                PageRouteBuilder(
+                  pageBuilder: (_, __, ___) => CalendarPage(),
+                  transitionsBuilder: (_, __, ___, child) => child,
+                ),
+              );
+            } else if (index == 3) {
+              // Jika item "Perizinan" diklik, pindah ke halaman Perizinan tanpa animasi
+              Navigator.pushReplacement(
+                context,
+                PageRouteBuilder(
+                  pageBuilder: (_, __, ___) => PerizinanPage(),
+                  transitionsBuilder: (_, __, ___, child) => child,
+                ),
+              );
+            }
+          },
+          items: [
+            BottomNavigationBarItem(
+              icon: Image.asset(
+                'assets/navbar/home.png',
+                width: 24,
+                color:
+                    buttonActiveColor, // Item "Home" dipilih, sehingga warnanya aktif
+              ),
+              label: 'Home',
             ),
-            unselectedLabelStyle: blackTextStyle.copyWith(
-              fontSize: 12,
-              fontWeight: medium,
+            BottomNavigationBarItem(
+              icon: Image.asset(
+                'assets/navbar/jadwal.png',
+                width: 24,
+              ),
+              label: 'Jadwal',
             ),
-            items: [
-              BottomNavigationBarItem(
-                icon: Image.asset(
-                  'assets/navbar/home.png',
-                  width: 24,
-                  color: buttonActiveColor,
-                ),
-                label: 'Home',
+            BottomNavigationBarItem(
+              icon: Image.asset(
+                'assets/navbar/kalender.png',
+                width: 24,
               ),
-              BottomNavigationBarItem(
-                icon: Image.asset(
-                  'assets/navbar/jadwal.png',
-                  width: 24,
-                ),
-                label: 'Overview',
+              label: 'Kalendar',
+            ),
+            BottomNavigationBarItem(
+              icon: Image.asset(
+                'assets/navbar/perizinan.png',
+                width: 24,
               ),
-              BottomNavigationBarItem(
-                icon: Image.asset(
-                  'assets/navbar/kalender.png',
-                  width: 24,
-                ),
-                label: 'Kalendar',
-              ),
-              BottomNavigationBarItem(
-                icon: Image.asset(
-                  'assets/navbar/perizinan.png',
-                  width: 24,
-                ),
-                label: 'Perizinan',
-              ),
-            ]),
+              label: 'Perizinan',
+            ),
+          ],
+        ),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {},
