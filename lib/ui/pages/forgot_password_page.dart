@@ -1,3 +1,4 @@
+import 'package:apsensi_mobile/ui/pages/otp_page.dart';
 import 'package:flutter/material.dart';
 
 import '../../shared/theme.dart';
@@ -7,6 +8,11 @@ class ForgotPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final TextEditingController emailController = TextEditingController();
+
+    final _formKey = GlobalKey<FormState>();
+    final RegExp emailRegex = RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$');
+
     return Scaffold(
       body: Container(
         decoration: BoxDecoration(
@@ -79,63 +85,87 @@ class ForgotPage extends StatelessWidget {
                 borderRadius: BorderRadius.circular(20),
                 color: whiteColor,
               ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  // EMAIL INPUT UNTUK FORGOT PASSWORD
-        
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'Email',
-                        style: blackTextStyle.copyWith(
-                          fontWeight: medium,
+              child: Form(
+                key: _formKey,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    // EMAIL INPUT UNTUK FORGOT PASSWORD
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Email',
+                          style: blackTextStyle.copyWith(
+                            fontWeight: medium,
+                          ),
                         ),
-                      ),
-                      const SizedBox(
-                        height: 8,
-                      ),
-                      TextFormField(
-                        decoration: const InputDecoration(
-                          // border: OutlineInputBorder(
-                          //   borderRadius: BorderRadius.circular(14)
-                          // ),
-                            contentPadding: EdgeInsets.all(4)),
-                      )
-                    ],
-                  ),
-        
-        
-                  const SizedBox(
-                    height: 8,
-                  ),
-        
-                  const SizedBox(
-                    height: 8,
-                  ),
-        
-                  SizedBox(
-                    width: double.infinity,
-                    height: 50,
-                    child: TextButton(onPressed: () {},
-                      style: TextButton.styleFrom(
-                        backgroundColor: primary,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(56),
+                        const SizedBox(
+                          height: 8,
                         ),
-                      ),
-                      child: Text(
-                        'Confirm',
-                        style: whiteTextStyle.copyWith(
-                          fontSize: 16,
-                          fontWeight: semibold,
-                        ),
-                      ),
+                        TextFormField(
+                          controller: emailController,
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'Please enter your email';
+                            }
+                            if (!emailRegex.hasMatch(value)) {
+                              return 'Please enter a valid email';
+                            }
+                            return null;
+                          },
+                          decoration: const InputDecoration(
+                            // border: OutlineInputBorder(
+                            //   borderRadius: BorderRadius.circular(14)
+                            // ),
+                            contentPadding: EdgeInsets.all(4),
+                          ),
+                          
+                        )
+                      ],
                     ),
-                  )
-        
-                ],
+          
+                    const SizedBox(
+                      height: 8,
+                    ),
+                    const SizedBox(
+                      height: 8,
+                    ),
+          
+                    SizedBox(
+                      width: double.infinity,
+                      height: 50,
+                      child: TextButton( 
+                        onPressed: () {
+                          if (_formKey.currentState!.validate()) {
+                            Navigator.of(context).pop();
+                            String enteredEmail = emailController.text;
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (context) {
+                                  return OtpPage(email: enteredEmail);
+                                },
+                              ),
+                            );
+                          }
+                        },
+                        style: TextButton.styleFrom(
+                          backgroundColor: primary,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(56),
+                          ),
+                        ),
+                        child: Text(
+                          'Confirm',
+                          style: whiteTextStyle.copyWith(
+                            fontSize: 16,
+                            fontWeight: semibold,
+                          ),
+                        ),
+                      ),
+                    )
+                  ],
+                ),
               ),
             )
           ],
