@@ -1,22 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:apsensi_mobile/shared/theme.dart';
+import 'package:intl/intl.dart';
+import 'package:table_calendar/table_calendar.dart';
 import 'perizinan_page.dart';
 import 'jadwal_page.dart';
 import 'home_page.dart';
 
-class CalendarPage extends StatelessWidget {
+class CalendarPage extends StatefulWidget {
   const CalendarPage({Key? key});
+  final Padding = 24.0;
 
+  @override
+  State<CalendarPage> createState() => _CalendarPageState();
+}
+
+class _CalendarPageState extends State<CalendarPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: transparentBackground,
-      body: Center(
-        child: Text(
-          'Ini Halaman Calendar',
-          style: TextStyle(fontSize: 20),
-        ),
-      ),
       bottomNavigationBar: BottomAppBar(
         color: whiteColor,
         shape: const CircularNotchedRectangle(),
@@ -121,6 +123,154 @@ class CalendarPage extends StatelessWidget {
         ),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+      body: ListView(
+        padding: const EdgeInsetsDirectional.symmetric(
+          horizontal: 34,
+        ),
+        children: [
+          tittlePage(),
+          tableCalendar(),
+          eventInMonth(),
+        ],
+      ),
     );
   }
+}
+
+Widget tittlePage(){
+  return Container(
+    margin: const EdgeInsets.only(
+        top: 40,
+      ),
+      child: Text(
+        'Kalender',
+        style: blackTextStyle.copyWith(
+                  fontSize: 18,
+                  fontWeight: bold,
+                ),
+                textAlign: TextAlign.center,
+      ),
+  );
+}
+
+Widget tableCalendar() {
+  return Container(
+    margin: const EdgeInsets.only(
+      top: 15,
+    ),
+    decoration: BoxDecoration(
+      borderRadius: BorderRadius.circular(20),
+      color: Colors.white,
+      boxShadow: [
+        BoxShadow(
+          color: Colors.grey.withOpacity(0.5),
+          spreadRadius: 3,
+          blurRadius: 5,
+          offset: Offset(3, 3),
+        ),
+      ],
+    ),
+    child: TableCalendar(
+      calendarBuilders: CalendarBuilders(
+        // Builder untuk menentukan tampilan tanggal default
+        defaultBuilder: (context, date, _) {
+          if (date.weekday == DateTime.sunday || date.weekday == DateTime.saturday) {
+            return Container(
+              margin: EdgeInsets.all(5.0),
+              child: Center(
+                child: Text(
+                  date.day.toString(),
+                  style: TextStyle(color: Colors.red),
+                ),
+              ),
+            );
+          } else {
+            return null;
+          }
+        },
+        // Builder untuk menentukan tampilan hari ini
+        todayBuilder: (context, day, focusedDay) {
+          // Periksa apakah tanggal ini adalah tanggal hari ini
+          if (isToday(day)) {
+            return Container(
+              margin: EdgeInsets.all(5.0),
+              decoration: BoxDecoration(
+                color: buttonActiveColor,
+                borderRadius: BorderRadius.circular(50.0),
+              ),
+              child: Center(
+                child: Text(
+                  day.day.toString(),
+                  style: whiteTextStyle,
+                ),
+              ),
+            );
+          } else {
+            // Jika bukan tanggal hari ini, biarkan menggunakan tampilan default
+            return null;
+          }
+        },
+        // Builder untuk menentukan tampilan nama hari dalam seminggu (DOW: Day of Week)
+        dowBuilder: (context, day) {
+          if (day.weekday == DateTime.sunday || day.weekday == DateTime.saturday) {
+            final text = DateFormat.E().format(day);
+            return Center(
+              child: Text(
+                text,
+                style: TextStyle(color: Colors.red),
+              ),
+            );
+          } else {
+            return null;
+          }
+        },
+      ),
+      headerStyle: HeaderStyle(formatButtonVisible: false, titleCentered: true),
+      focusedDay: DateTime.now(),
+      firstDay: DateTime(2021, 01, 01),
+      lastDay: DateTime(2030, 12, 31),
+    ),
+  );
+}
+
+bool isToday(DateTime date) {
+  final now = DateTime.now();
+  return date.year == now.year && date.month == now.month && date.day == now.day;
+}
+
+Widget eventInMonth() {
+  return Container(
+    margin: const EdgeInsets.only(
+      top: 15,
+    ),
+    decoration: BoxDecoration(
+      borderRadius: BorderRadius.circular(20),
+      color: whiteColor,
+      boxShadow: [
+        BoxShadow(
+          color: Colors.grey.withOpacity(0.5),
+          spreadRadius: 3,
+          blurRadius: 5,
+          offset: Offset(3, 3),
+        ),
+      ],
+    ),
+    child: DataTable(
+      columns: [
+        DataColumn(label: Text('Tanggal')),
+        DataColumn(label: Text('Hari Libur')),
+      ],
+      rows: [
+        DataRow(cells: [
+          DataCell(Text('1')),
+          DataCell(Text('New Year')),
+        ]),
+        DataRow(cells: [
+          DataCell(Text('14')),
+          DataCell(Text('Valentine\'s Day')),
+        ]),
+        // Tambahkan baris DataRow sesuai dengan kebutuhan
+      ],
+    ),
+  );
 }
