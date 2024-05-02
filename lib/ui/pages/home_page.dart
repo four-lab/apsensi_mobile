@@ -3,6 +3,7 @@ import 'package:apsensi_mobile/shared/theme.dart';
 import 'jadwal_page.dart';
 import 'calendar_page.dart';
 import 'perizinan_page.dart';
+import 'presensi_page.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({Key? key});
@@ -100,7 +101,16 @@ class HomePage extends StatelessWidget {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {},
+        onPressed: () {
+          // Ketika tombol floating button diklik, pindah ke halaman PresensiPage
+          Navigator.push(
+            context,
+            PageRouteBuilder(
+              pageBuilder: (_, __, ___) => PresensiPage(),
+              transitionsBuilder: (_, __, ___, child) => child,
+            ),
+          );
+        },
         backgroundColor: buttonActiveColor,
         shape: const CircleBorder(),
         child: Image.asset(
