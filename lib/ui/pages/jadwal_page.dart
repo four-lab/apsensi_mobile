@@ -1,3 +1,4 @@
+import 'package:apsensi_mobile/ui/pages/presensi_page.dart';
 import 'package:flutter/material.dart';
 import 'package:apsensi_mobile/shared/theme.dart';
 import 'home_page.dart';
@@ -112,7 +113,16 @@ class JadwalPage extends StatelessWidget {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {},
+        onPressed: () {
+          // Ketika tombol floating button diklik, pindah ke halaman PresensiPage
+          Navigator.push(
+            context,
+            PageRouteBuilder(
+              pageBuilder: (_, __, ___) => PresensiPage(),
+              transitionsBuilder: (_, __, ___, child) => child,
+            ),
+          );
+        },
         backgroundColor: buttonActiveColor,
         shape: const CircleBorder(),
         child: Image.asset(

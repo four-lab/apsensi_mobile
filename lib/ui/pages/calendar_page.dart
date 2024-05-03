@@ -1,3 +1,4 @@
+import 'package:apsensi_mobile/ui/pages/presensi_page.dart';
 import 'package:flutter/material.dart';
 import 'package:apsensi_mobile/shared/theme.dart';
 import 'package:intl/intl.dart';
@@ -114,7 +115,16 @@ class _CalendarPageState extends State<CalendarPage> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {},
+        onPressed: () {
+          // Ketika tombol floating button diklik, pindah ke halaman PresensiPage
+          Navigator.push(
+            context,
+            PageRouteBuilder(
+              pageBuilder: (_, __, ___) => PresensiPage(),
+              transitionsBuilder: (_, __, ___, child) => child,
+            ),
+          );
+        },
         backgroundColor: buttonActiveColor,
         shape: const CircleBorder(),
         child: Image.asset(
@@ -137,19 +147,19 @@ class _CalendarPageState extends State<CalendarPage> {
   }
 }
 
-Widget tittlePage(){
+Widget tittlePage() {
   return Container(
     margin: const EdgeInsets.only(
-        top: 40,
+      top: 40,
+    ),
+    child: Text(
+      'Kalender',
+      style: blackTextStyle.copyWith(
+        fontSize: 18,
+        fontWeight: bold,
       ),
-      child: Text(
-        'Kalender',
-        style: blackTextStyle.copyWith(
-                  fontSize: 18,
-                  fontWeight: bold,
-                ),
-                textAlign: TextAlign.center,
-      ),
+      textAlign: TextAlign.center,
+    ),
   );
 }
 
@@ -174,7 +184,8 @@ Widget tableCalendar() {
       calendarBuilders: CalendarBuilders(
         // Builder untuk menentukan tampilan tanggal default
         defaultBuilder: (context, date, _) {
-          if (date.weekday == DateTime.sunday || date.weekday == DateTime.saturday) {
+          if (date.weekday == DateTime.sunday ||
+              date.weekday == DateTime.saturday) {
             return Container(
               margin: EdgeInsets.all(5.0),
               child: Center(
@@ -212,7 +223,8 @@ Widget tableCalendar() {
         },
         // Builder untuk menentukan tampilan nama hari dalam seminggu (DOW: Day of Week)
         dowBuilder: (context, day) {
-          if (day.weekday == DateTime.sunday || day.weekday == DateTime.saturday) {
+          if (day.weekday == DateTime.sunday ||
+              day.weekday == DateTime.saturday) {
             final text = DateFormat.E().format(day);
             return Center(
               child: Text(
@@ -235,7 +247,9 @@ Widget tableCalendar() {
 
 bool isToday(DateTime date) {
   final now = DateTime.now();
-  return date.year == now.year && date.month == now.month && date.day == now.day;
+  return date.year == now.year &&
+      date.month == now.month &&
+      date.day == now.day;
 }
 
 Widget eventInMonth() {
