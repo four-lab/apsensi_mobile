@@ -173,13 +173,16 @@ class ResetPasswordPage extends StatelessWidget {
                     ),
                   );
                 },
-                child: Align(
-                  alignment: Alignment.center,
-                  //icon: Icons.arrow_back_ios
-                  child: Text(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(Icons.arrow_back_ios_new_rounded, size: 15,),
+                    const SizedBox(width: 8,),
+                    Text(
                     "Kembali ke Login",
                     style: blackTextStyle,
                   ),
+                  ],
                 ),
               ),
           ],
