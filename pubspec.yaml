@@ -50,6 +50,9 @@ dependencies:
   #file_picker
   file_picker: ^8.0.3
 
+  #date picker
+  date_picker_timeline: 
+
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
