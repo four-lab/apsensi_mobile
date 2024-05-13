@@ -90,6 +90,7 @@ flutter:
      - assets/home/
      - assets/navbar/
      - assets/perizinan/
+     - assets/profile/
      
 
   # An image asset can refer to one or more resolution-specific "variants", see

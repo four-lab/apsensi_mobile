@@ -1,5 +1,7 @@
+import 'package:apsensi_mobile/ui/pages/profile_page.dart';
 import 'package:flutter/material.dart';
 import 'package:apsensi_mobile/shared/theme.dart';
+import 'package:flutter/widgets.dart';
 import 'jadwal_page.dart';
 import 'calendar_page.dart';
 import 'perizinan_page.dart';
@@ -124,7 +126,7 @@ class HomePage extends StatelessWidget {
           horizontal: 34,
         ),
         children: [
-          buildProfile(),
+          buildProfile(context),
           buildCardStatusPresensi(),
           buildCardJadwalHariIni(),
         ],
@@ -132,7 +134,7 @@ class HomePage extends StatelessWidget {
     );
   }
 
-  Widget buildProfile() {
+  Widget buildProfile(BuildContext context) {
     return Container(
       margin: const EdgeInsets.only(
         top: 40,
@@ -172,13 +174,18 @@ class HomePage extends StatelessWidget {
               ),
             ],
           ),
-          Container(
-            width: 35,
-            height: 35,
-            decoration: const BoxDecoration(
-              shape: BoxShape.circle,
-              image: DecorationImage(
-                  image: AssetImage('assets/home/profil_picture.png')),
+          GestureDetector(
+            onTap: () {
+              Navigator.push(context, MaterialPageRoute(builder: (context) => ProfilePage()));
+             },
+            child: Container(
+              width: 40,
+              height: 40,
+              decoration: const BoxDecoration(
+                shape: BoxShape.circle,
+                image: DecorationImage(
+                    image: AssetImage('assets/home/profil_picture.png')),
+              ),
             ),
           )
         ],
