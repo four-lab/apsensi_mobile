@@ -1,9 +1,10 @@
 import 'package:apsensi_mobile/shared/theme.dart';
+import 'package:apsensi_mobile/ui/pages/edit_profil.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class ProfilePage extends StatelessWidget {
-  const ProfilePage({Key? key});
+  const ProfilePage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -42,12 +43,12 @@ class ProfilePage extends StatelessWidget {
               nama(),
               boxprofile(),
               nextProfile(),
-              editButton(),
+              editButton(context), // Pass context to the editButton
             ],
           ),
         ),
       ),
-    ); 
+    );
   }
 }
 
@@ -58,7 +59,7 @@ Widget fotoprofil() {
   );
 }
 
-Widget nama(){
+Widget nama() {
   return Column(
     children: [
       SizedBox(height: 20),
@@ -69,7 +70,7 @@ Widget nama(){
           fontWeight: FontWeight.w600,
         ),
       ),
-      SizedBox( height: 20,),
+      SizedBox(height: 20),
       Text(
         'ahmadirsyadulibad7@gmail.com',
         style: greyTextStyle.copyWith(
@@ -78,12 +79,12 @@ Widget nama(){
           fontWeight: FontWeight.w500,
         ),
       ),
-      SizedBox(height: 20,)
+      SizedBox(height: 20),
     ],
   );
 }
 
-Widget boxprofile(){
+Widget boxprofile() {
   return Container(
     child: Card(
       color: buttonActiveColor,
@@ -172,7 +173,7 @@ Widget boxprofile(){
   );
 }
 
-Widget nextProfile(){
+Widget nextProfile() {
   return Container(
     margin: EdgeInsets.symmetric(horizontal: 8),
     child: Column(
@@ -302,22 +303,27 @@ Widget nextProfile(){
                   color: Colors.black,
                 ),
               ),
-              SizedBox(height: 20,)
+              SizedBox(height: 20)
             ],
-          )
+          ),
         ),
       ],
     ),
   );
 }
 
-Widget editButton(){
+Widget editButton(BuildContext context) {
   return SizedBox(
     width: double.infinity,
     height: 50,
     child: TextButton(
       onPressed: () {
-        // Fungsi yang akan dijalankan saat tombol ditekan
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => EditProfile(),
+          ),
+        );
       },
       style: TextButton.styleFrom(
         backgroundColor: buttonActiveColor,
