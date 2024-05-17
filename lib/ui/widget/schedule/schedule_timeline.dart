@@ -7,28 +7,28 @@ import 'package:google_fonts/google_fonts.dart';
 
 class ScheduleTimeline extends StatelessWidget {
   final List<Schedule> scheduleList;
-  const ScheduleTimeline({Key? key, required this.scheduleList}) : super(key: key);
+  const ScheduleTimeline({Key? key, required this.scheduleList})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Container(
       margin: const EdgeInsets.only(
-      bottom: 35,
-    ),
+        bottom: 35,
+      ),
       padding: EdgeInsets.all(10),
       decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.only(
-          bottomLeft: Radius.circular(10),
-          bottomRight: Radius.circular(10)
-        )
-      ),
-       child: Row(
+          color: Colors.white,
+          borderRadius: BorderRadius.only(
+              bottomLeft: Radius.circular(10),
+              bottomRight: Radius.circular(10))),
+      child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Expanded(
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start, // Align Column ke kiri
+              crossAxisAlignment:
+                  CrossAxisAlignment.start, // Align Column ke kiri
               children: [
                 for (var schedule in scheduleList)
                   Row(
@@ -44,7 +44,7 @@ class ScheduleTimeline extends StatelessWidget {
                               fontWeight: FontWeight.w600,
                               color: Colors.black,
                             ),
-                            ),
+                          ),
                           Text(
                             schedule.endTime ?? '',
                             style: GoogleFonts.poppins(
@@ -52,10 +52,12 @@ class ScheduleTimeline extends StatelessWidget {
                               fontWeight: FontWeight.w500,
                               color: Color(0xFFBCC1CD),
                             ),
-                            ),
+                          ),
                         ],
                       ),
-                      SizedBox(width: 8), // Menambahkan jarak horizontal antara waktu dan kartu
+                      SizedBox(
+                          width:
+                              8), // Menambahkan jarak horizontal antara waktu dan kartu
                       _buildCard(
                         schedule.bgColorActive,
                         schedule.bgColorInactive ?? Colors.transparent,
@@ -81,15 +83,15 @@ class ScheduleTimeline extends StatelessWidget {
   }
 
   Widget _buildCard(
-    Gradient? bgColorActive, 
-    Color bgColorInactive, 
-    String course, 
+    Gradient? bgColorActive,
+    Color bgColorInactive,
+    String course,
     String subject,
-    String room, 
-    String teacher, 
-    IconData pinIcon, 
-    IconData profileIcon, 
-    Color iconColorActive, 
+    String room,
+    String teacher,
+    IconData pinIcon,
+    IconData profileIcon,
+    Color iconColorActive,
     Color iconColorInactive,
     Color textColorActive,
     Color textColorInactive,
@@ -97,7 +99,6 @@ class ScheduleTimeline extends StatelessWidget {
     // final Color iconColor = iconColorActive ?? iconColorInactive;
 
     // final Color textColor = bgColorActive != null ? textColorActiveInactive : textColorActiveInactive; // Gunakan warna teks yang sesuai dengan status aktif atau non-aktif
-
 
     final BoxDecoration decoration = BoxDecoration(
       color: bgColorActive != null ? null : bgColorInactive,
@@ -115,10 +116,12 @@ class ScheduleTimeline extends StatelessWidget {
           children: [
             Text(
               course,
-                style: GoogleFonts.poppins(
+              style: GoogleFonts.poppins(
                 fontSize: 16,
                 fontWeight: FontWeight.w600,
-                color: bgColorActive != null ? textColorActive : textColorInactive, //color mengikuti active atau inactive
+                color: bgColorActive != null
+                    ? textColorActive
+                    : textColorInactive, //color mengikuti active atau inactive
               ),
             ),
             SizedBox(height: 4),
@@ -127,15 +130,20 @@ class ScheduleTimeline extends StatelessWidget {
               style: GoogleFonts.poppins(
                 fontSize: 12,
                 fontWeight: FontWeight.w500,
-                color: bgColorActive != null ? textColorActive : textColorInactive, //color mengikuti active atau inactive
+                color: bgColorActive != null
+                    ? textColorActive
+                    : textColorInactive, //color mengikuti active atau inactive
               ),
             ),
             SizedBox(height: 15),
-            Row( // Baris untuk pinIcon dan room
+            Row(
+              // Baris untuk pinIcon dan room
               children: [
                 Icon(
                   pinIcon,
-                  color: bgColorActive != null ? iconColorActive : iconColorInactive,
+                  color: bgColorActive != null
+                      ? iconColorActive
+                      : iconColorInactive,
                   size: 16,
                 ),
                 SizedBox(width: 10),
@@ -144,17 +152,22 @@ class ScheduleTimeline extends StatelessWidget {
                   style: GoogleFonts.poppins(
                     fontSize: 12,
                     fontWeight: FontWeight.w400,
-                    color: bgColorActive != null ? textColorActive : textColorInactive, //color mengikuti active atau inactive
+                    color: bgColorActive != null
+                        ? textColorActive
+                        : textColorInactive, //color mengikuti active atau inactive
                   ),
                 ),
               ],
             ),
             SizedBox(height: 5),
-            Row( // Baris untuk profileIcon dan teacher
+            Row(
+              // Baris untuk profileIcon dan teacher
               children: [
                 Icon(
                   profileIcon,
-                  color: bgColorActive != null ? iconColorActive : iconColorInactive,
+                  color: bgColorActive != null
+                      ? iconColorActive
+                      : iconColorInactive,
                   size: 16,
                 ),
                 SizedBox(width: 10),
@@ -163,7 +176,9 @@ class ScheduleTimeline extends StatelessWidget {
                   style: GoogleFonts.poppins(
                     fontSize: 12,
                     fontWeight: FontWeight.w400,
-                    color: bgColorActive != null ? textColorActive : textColorInactive, //color mengikuti active atau inactive
+                    color: bgColorActive != null
+                        ? textColorActive
+                        : textColorInactive, //color mengikuti active atau inactive
                   ),
                 ),
               ],
@@ -171,6 +186,6 @@ class ScheduleTimeline extends StatelessWidget {
           ],
         ),
       ),
-    );  
+    );
   }
 }
