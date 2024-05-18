@@ -1,3 +1,4 @@
+import 'package:apsensi_mobile/ui/pages/presensi_page.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:apsensi_mobile/shared/theme.dart';
@@ -16,7 +17,7 @@ class PerizinanPage extends StatefulWidget {
 class _PerizinanPageState extends State<PerizinanPage> {
   String? _selectedItem; // Letakkan variabel di sini
   TextEditingController descriptionController = TextEditingController();
-  TextEditingController dateController= TextEditingController();
+  TextEditingController dateController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -109,7 +110,16 @@ class _PerizinanPageState extends State<PerizinanPage> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {},
+        onPressed: () {
+          // Ketika tombol floating button diklik, pindah ke halaman PresensiPage
+          Navigator.push(
+            context,
+            PageRouteBuilder(
+              pageBuilder: (_, __, ___) => PresensiPage(),
+              transitionsBuilder: (_, __, ___, child) => child,
+            ),
+          );
+        },
         backgroundColor: buttonActiveColor,
         shape: const CircleBorder(),
         child: Image.asset(
@@ -200,38 +210,34 @@ class _PerizinanPageState extends State<PerizinanPage> {
             ),
           ),
           SizedBox(height: 8),
-          Text(
-          'Deskripsi'
-          ),
+          Text('Deskripsi'),
           SizedBox(height: 8),
           TextField(
             controller: descriptionController,
             maxLines: 5,
             decoration: InputDecoration(
               hintText: "Masukkan Deskripsi",
-              border: OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(20))),
+              border: OutlineInputBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(20))),
               contentPadding: EdgeInsets.all(10),
             ),
           ),
           SizedBox(height: 8),
-          Text(
-          'Tanggal Izin'
-          ),
+          Text('Tanggal Izin'),
           SizedBox(height: 8),
-          
+
           // tempat tanggal
 
           SizedBox(height: 8),
-          Text(
-            'Lampiran'
-          ),
+          Text('Lampiran'),
           SizedBox(height: 8),
           SizedBox(
             width: double.infinity,
             height: 300,
             child: TextButton(
               onPressed: () async {
-                FilePickerResult? result = await FilePicker.platform.pickFiles();
+                FilePickerResult? result =
+                    await FilePicker.platform.pickFiles();
 
                 if (result != null) {
                   PlatformFile file = result.files.first;
@@ -246,19 +252,23 @@ class _PerizinanPageState extends State<PerizinanPage> {
                 }
               },
               style: TextButton.styleFrom(
-                foregroundColor: Colors.black, backgroundColor: Colors.white, // Warna latar belakang menggunakan putih
+                foregroundColor: Colors.black,
+                backgroundColor:
+                    Colors.white, // Warna latar belakang menggunakan putih
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(20), // Bentuk tombol
-                  side: BorderSide(color: Colors.black, width: 0.4), // Border dengan warna hitam dan lebar 0.4
+                  side: BorderSide(
+                      color: Colors.black,
+                      width: 0.4), // Border dengan warna hitam dan lebar 0.4
                 ),
               ),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Image.asset(
-                  'assets/perizinan/pdfIcon.png', // Path gambar PDF
-                  width: 48, // Lebar gambar
-                ),
+                    'assets/perizinan/pdfIcon.png', // Path gambar PDF
+                    width: 48, // Lebar gambar
+                  ),
                   SizedBox(width: 8), // Jarak antara ikon dan teks
                   Text(
                     'Hanya file dengan format PDF', // Teks

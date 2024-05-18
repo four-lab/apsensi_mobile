@@ -16,7 +16,7 @@ Widget buildCardStatusPresensi() {
       child: Column(
         children: [
           Text(
-            'Presensi Saat Ini             Kamis, 07 Maret 2024',
+            'Presensi Saat Ini             Senin, 07 Maret 2024',
             style: blackTextStyle.copyWith(
               fontSize: 12,
               fontWeight: bold,
