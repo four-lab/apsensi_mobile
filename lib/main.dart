@@ -1,23 +1,32 @@
-import 'package:apsensi_mobile/ui/pages/calendar_page.dart';
-import 'package:apsensi_mobile/ui/pages/jadwal_page.dart';
+import 'package:apsensi_mobile/core/controllers/auth_controller.dart';
+import 'package:apsensi_mobile/routes/route.dart';
+import 'package:apsensi_mobile/ui/pages/home_page.dart';
 import 'package:apsensi_mobile/ui/pages/login_page.dart';
+import 'package:apsensi_mobile/ui/widget/launcher.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-void main() => runApp(const MyApp());
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+
+  runApp( MyApp(prefs: prefs));
+}
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  final SharedPreferences prefs;
+
+  const MyApp({Key? key, required this.prefs}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return GetMaterialApp(
+      title: 'Apsensi Mobile',
+      theme: ThemeData(primarySwatch: Colors.blue),
       debugShowCheckedModeBanner: false,
-      // home: LoginPage(),
-      routes: {
-        '/': (context) => const LoginPage(),
-        '/calendar': (context) => const CalendarPage(),
-        '/jadwal': (context) => JadwalPage(),
-      },
+      home: const launcher(),
+      getPages: RouteApp.pages,
     );
   }
 }

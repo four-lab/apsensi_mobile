@@ -1,7 +1,9 @@
+import 'package:apsensi_mobile/core/controllers/auth_controller.dart';
 import 'package:apsensi_mobile/shared/theme.dart';
 import 'package:apsensi_mobile/ui/pages/edit_profil.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class ProfilePage extends StatelessWidget {
   const ProfilePage({Key? key}) : super(key: key);
@@ -44,6 +46,8 @@ class ProfilePage extends StatelessWidget {
               boxprofile(),
               nextProfile(),
               editButton(context), // Pass context to the editButton
+              SizedBox(height: 16),
+              logoutButton(context)
             ],
           ),
         ),
@@ -346,5 +350,64 @@ Widget editButton(BuildContext context) {
         ],
       ),
     ),
+  );
+}
+
+Widget logoutButton(BuildContext context) {
+  return SizedBox(
+    width: double.infinity,
+    height: 50,
+    child: TextButton(
+      onPressed: () async {
+        showLogoutConfirmationDialog(context);  
+      },
+      style: TextButton.styleFrom(
+        side: BorderSide(color: Colors.blue),
+        backgroundColor: Colors.white,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(20),
+        ),
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text(
+            'Logout',
+            style: whiteTextStyle.copyWith(
+              fontSize: 16,
+              fontWeight: semibold,
+              color: Colors.blue, 
+            ),
+          ),
+        ],
+      ),
+    ),
+  );
+}
+
+void showLogoutConfirmationDialog(BuildContext context) {
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        title: Text('Konfirmasi Logout'),
+        content: Text('Apakah Anda yakin ingin keluar?'),
+        actions: <Widget>[
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop(); // Tutup dialog
+            },
+            child: Text('Tidak'),
+          ),
+          TextButton(
+            onPressed: () async {
+              Navigator.of(context).pop(); // Tutup dialog
+              await AuthController.logout(context, await SharedPreferences.getInstance());
+            },
+            child: Text('Ya'),
+          ),
+        ],
+      );
+    },
   );
 }

@@ -1,6 +1,6 @@
 // ignore_for_file: prefer_const_constructors
 
-import 'package:apsensi_mobile/models/schedule.dart';
+import 'package:apsensi_mobile/core/models/jadwal/schedule.dart';
 import 'package:apsensi_mobile/ui/pages/presensi_page.dart';
 import 'package:apsensi_mobile/ui/widget/schedule/schedule_timeline.dart';
 import 'package:date_picker_timeline/date_picker_timeline.dart';

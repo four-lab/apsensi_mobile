@@ -1,11 +1,22 @@
 import 'package:apsensi_mobile/ui/pages/forgot_password_page.dart';
-import 'package:apsensi_mobile/ui/pages/home_page.dart';
+import 'package:apsensi_mobile/ui/widget/login/textfield.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:apsensi_mobile/shared/theme.dart';
+import 'package:apsensi_mobile/core/controllers/auth_controller.dart';
 
-class LoginPage extends StatelessWidget {
+class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
+
+  @override
+  State<LoginPage> createState() => _LoginPageState();
+}
+
+class _LoginPageState extends State<LoginPage> {
+  bool _isObscure = true;
+  TextEditingController username = TextEditingController();
+  TextEditingController password = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -56,26 +67,19 @@ class LoginPage extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          'Email',
+                          'Username',
                           style: blackTextStyle.copyWith(
                             fontWeight: medium,
                           ),
                         ),
                         const SizedBox(
-                          height: 8,
+                          height: 5,
                         ),
-                        TextFormField(
-                          decoration: const InputDecoration(
-                              // border: OutlineInputBorder(
-                              //   borderRadius: BorderRadius.circular(14)
-                              // ),
-                              contentPadding: EdgeInsets.all(4)),
+                        CustomTextField(
+                          controller: username,
                         )
                       ],
                     ),
-          
-                    // PASSWORD INPUT
-          
                     const SizedBox(
                       height: 16,
                     ),
@@ -89,16 +93,18 @@ class LoginPage extends StatelessWidget {
                           ),
                         ),
                         const SizedBox(
-                          height: 8,
+                          height: 5,
                         ),
-                        TextFormField(
-                          obscureText: true,
-                          decoration: const InputDecoration(
-                              // border: OutlineInputBorder(
-                              //     borderRadius: BorderRadius.circular(14)
-                              // ),
-                              contentPadding: EdgeInsets.all(4)),
-                        )
+                        CustomTextField(
+                          controller: password,
+                          isPassword: true,
+                          isObscure: _isObscure,
+                          toggleObscureText: () {
+                            setState(() {
+                              _isObscure = !_isObscure;
+                            });
+                          },
+                        ),
                       ],
                     ),
                     const SizedBox(
@@ -106,7 +112,6 @@ class LoginPage extends StatelessWidget {
                     ),
                     GestureDetector(
                       onTap: () {
-                        // Navigator.of(context).pop();
                         Navigator.of(context).push(
                           MaterialPageRoute(
                             builder: (context) {
@@ -133,14 +138,7 @@ class LoginPage extends StatelessWidget {
                       height: 50,
                       child: TextButton(
                         onPressed: () {
-                          // Navigator.of(context).pop();
-                          Navigator.of(context).push(
-                            MaterialPageRoute(
-                              builder: (context) {
-                                return const HomePage();
-                              },
-                            ),
-                          );
+                          AuthController.login(context, username, password);
                         },
                         style: TextButton.styleFrom(
                           backgroundColor: buttonActiveColor,
