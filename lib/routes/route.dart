@@ -19,7 +19,15 @@ class RouteApp {
       },
     ),
     GetPage(name: '/reset-password', page: () => const ResetPasswordPage()),
-
+    // GetPage(
+    //   name: '/reset-password',
+    //   page: () {
+    //     final args = Get.arguments as Map<String, dynamic>;
+    //     final email = args['email'] as String;
+    //     final otp = args['otp'] as String;
+    //     return ResetPasswordPage(email: email, otp: otp);
+    //   },
+    // ),
     GetPage(name: '/home', page: () => const HomePage()),
   ];
 }

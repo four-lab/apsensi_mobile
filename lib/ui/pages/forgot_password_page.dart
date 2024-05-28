@@ -1,8 +1,14 @@
 import 'package:apsensi_mobile/ui/pages/login_page.dart';
+// import 'package:apsensi_mobile/ui/pages/otp_page.dart';
+// import 'package:flutter/material.dart';
+
+// import '../../shared/theme.dart';
+
 import 'package:apsensi_mobile/ui/pages/otp_page.dart';
 import 'package:flutter/material.dart';
-
-import '../../shared/theme.dart';
+import 'package:apsensi_mobile/shared/theme.dart';
+import 'package:apsensi_mobile/core/controllers/forgot_password_controller.dart';
+import 'package:get/get.dart';
 
 class ForgotPage extends StatelessWidget {
   const ForgotPage({super.key});
@@ -17,9 +23,8 @@ class ForgotPage extends StatelessWidget {
     return Scaffold(
       body: Container(
         decoration: BoxDecoration(
-        gradient: background,
-        
-      ),
+          gradient: background,
+        ),
         child: ListView(
           padding: const EdgeInsets.symmetric(horizontal: 31),
           children: [
@@ -77,7 +82,7 @@ class ForgotPage extends StatelessWidget {
               style: blackTextStyle.copyWith(
                 fontSize: 11,
                 fontWeight: superlight,
-                color: Colors.red
+                color: Colors.red,
               ),
             ),
             Container(
@@ -91,7 +96,6 @@ class ForgotPage extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    // EMAIL INPUT UNTUK FORGOT PASSWORD
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -110,44 +114,44 @@ class ForgotPage extends StatelessWidget {
                             if (value == null || value.isEmpty) {
                               return 'Please enter your email';
                             }
-                            if (!emailRegex.hasMatch(value)) {
-                              return 'Please enter a valid email';
-                            }
+                            // if (!emailRegex.hasMatch(value)) {
+                            //   return 'Please enter a valid email';
+                            // }
                             return null;
                           },
                           decoration: const InputDecoration(
+                            contentPadding: EdgeInsets.all(4),
                             // border: OutlineInputBorder(
                             //   borderRadius: BorderRadius.circular(14)
                             // ),
-                            contentPadding: EdgeInsets.all(4),
                           ),
-                          
                         )
                       ],
                     ),
-          
                     const SizedBox(
                       height: 8,
                     ),
                     const SizedBox(
                       height: 8,
                     ),
-          
                     SizedBox(
                       width: double.infinity,
                       height: 50,
-                      child: TextButton( 
+                      child: TextButton(
                         onPressed: () {
                           if (_formKey.currentState!.validate()) {
-                            Navigator.of(context).pop();
-                            String enteredEmail = emailController.text;
-                            Navigator.of(context).push(
-                              MaterialPageRoute(
-                                builder: (context) {
-                                  return OtpPage(email: enteredEmail);
-                                },
-                              ),
-                            );
+                            ForgotPasswordController.requestOTP(
+                                context, emailController);
+
+                            // Navigator.of(context).pop();
+                            // String enteredEmail = emailController.text;
+                            // Navigator.of(context).push(
+                            //   MaterialPageRoute(
+                            //     builder: (context) {
+                            //       return OtpPage(email: enteredEmail);
+                            //     },
+                            //   ),
+                            // );
                           }
                         },
                         style: TextButton.styleFrom(
@@ -170,31 +174,35 @@ class ForgotPage extends StatelessWidget {
               ),
             ),
             const SizedBox(
-            height: 25,
+              height: 25,
             ),
-              GestureDetector(
-                onTap: () {
-                  // Navigator.of(context).pop();
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (context) {
-                        return const LoginPage();
-                      },
-                    ),
-                  );
-                },
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Icon(Icons.arrow_back_ios_new_rounded, size: 15,),
-                    const SizedBox(width: 8,),
-                    Text(
+            GestureDetector(
+              onTap: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) {
+                      return const LoginPage();
+                    },
+                  ),
+                );
+              },
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(
+                    Icons.arrow_back_ios_new_rounded,
+                    size: 15,
+                  ),
+                  const SizedBox(
+                    width: 8,
+                  ),
+                  Text(
                     "Kembali ke Login",
                     style: blackTextStyle,
                   ),
-                  ],
-                ),
+                ],
               ),
+            ),
           ],
         ),
       ),
