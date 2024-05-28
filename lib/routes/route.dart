@@ -1,4 +1,3 @@
-import 'package:apsensi_mobile/ui/pages/backup_home_page.dart';
 import 'package:apsensi_mobile/ui/pages/home_page.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -6,7 +5,6 @@ import 'package:apsensi_mobile/ui/pages/forgot_password_page.dart';
 import 'package:apsensi_mobile/ui/pages/otp_page.dart';
 import 'package:apsensi_mobile/ui/pages/reset_password_page.dart';
 import 'package:apsensi_mobile/ui/pages/login_page.dart';
-import 'package:apsensi_mobile/core/models/user.dart';
 
 class RouteApp {
   static final pages = [

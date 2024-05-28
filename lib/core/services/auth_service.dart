@@ -6,7 +6,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class AuthService {
   
-  static Future<User?> login(String username, String password) async {
+  static Future<void> login(String username, String password) async {
     final url = Uri.parse('${Constant.baseUrl}/login');
     final response = await http.post(
       url,
@@ -18,10 +18,13 @@ class AuthService {
       try {
         final result = jsonDecode(response.body);
         print('Login response: $result');
-        return User.fromJson(result['data']);
+
+        final String token = result['data']['token'];
+        await Constant.saveToken(token);
+        print('Token saved: $token');
+
       } catch (e) {
         print('Failed to decode login response: $e');
-        throw 'Failed to decode login response';
       }
     } else {
       final errorResult = jsonDecode(response.body);
@@ -32,7 +35,7 @@ class AuthService {
 
   static Future<void> logout(SharedPreferences preferences) async {
     final url = Uri.parse('${Constant.baseUrl}/logout');
-    final token = preferences.getString('token');
+    String? token = await Constant.getToken();
     if (token != null) {
       await http.delete(
         url,
@@ -40,43 +43,37 @@ class AuthService {
           'Authorization': 'Bearer $token'
         }
       );
+      await Constant.saveToken('');
     } else {
       throw 'Token tidak ditemukan';
     }
   }
 
-  static Future<User?> getUserInfo(String token) async {
-    if (token == null) {
-      throw 'Token tidak tersedia';
-    }
-    
-    final url = Uri.parse('${Constant.baseUrl}/user');
-    final response = await http.get(
-      url,
-      headers: {
-        'Accept': 'application/json',
-        'Authorization': 'Bearer $token',
-      }
-    );
+  static Future<User?> getUser(String token) async {
+  final url = Uri.parse('${Constant.baseUrl}/user');
+  print('Fetch user token: $token');
+  final response = await http.get(
+    url,
+    headers: {
+      'Accept': 'application/json',
+      'Authorization': 'Bearer $token',
+    },
+  );
+    print('Fetch user response body: ${response.body}');
 
-    if (response.statusCode == 200) {
+  if (response.statusCode == 200) {
     try {
       final result = jsonDecode(response.body);
-      print('User info response: $result');
-      
-      if (result['data'] != null) {
-        return User.fromJson(result['data']);
-      } else {
-        throw 'Data user tidak tersedia';
-      }
+      return User.fromJson(result);
+
     } catch (e) {
-      print('Failed to decode user info response: $e');
-      throw 'Failed to decode user info response';
+      print('Failed to decode get user response: $e');
+      throw 'Failed to decode get user response';
     }
   } else {
     final errorResult = jsonDecode(response.body);
-    print('User info error response: $errorResult');
-    throw '${errorResult['meta']['message'] ?? 'Unknown error occured'}';
+    print('Get user error response: $errorResult');
+    throw '${errorResult['message'] ?? 'Unknown error occurred'}';
   }
-  }
+}
 }

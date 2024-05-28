@@ -137,8 +137,8 @@ class _LoginPageState extends State<LoginPage> {
                       width: double.infinity,
                       height: 50,
                       child: TextButton(
-                        onPressed: () {
-                          AuthController.login(context, username, password);
+                        onPressed: () async {
+                          await AuthController.login(context, username, password);
                         },
                         style: TextButton.styleFrom(
                           backgroundColor: buttonActiveColor,
