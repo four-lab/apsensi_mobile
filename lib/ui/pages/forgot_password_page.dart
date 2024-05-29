@@ -1,9 +1,4 @@
 import 'package:apsensi_mobile/ui/pages/login_page.dart';
-// import 'package:apsensi_mobile/ui/pages/otp_page.dart';
-// import 'package:flutter/material.dart';
-
-// import '../../shared/theme.dart';
-
 import 'package:apsensi_mobile/ui/pages/otp_page.dart';
 import 'package:flutter/material.dart';
 import 'package:apsensi_mobile/shared/theme.dart';
@@ -15,10 +10,9 @@ class ForgotPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final TextEditingController emailController = TextEditingController();
+    final TextEditingController usernameController = TextEditingController();
 
     final _formKey = GlobalKey<FormState>();
-    final RegExp emailRegex = RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$');
 
     return Scaffold(
       body: Container(
@@ -78,7 +72,7 @@ class ForgotPage extends StatelessWidget {
             ),
             Text(
               textAlign: TextAlign.left,
-              '*Pastikan email yang anda masukkan aktif',
+              '*Pastikan username yang anda masukkan aktif',
               style: blackTextStyle.copyWith(
                 fontSize: 11,
                 fontWeight: superlight,
@@ -100,7 +94,7 @@ class ForgotPage extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          'Email',
+                          'Username',
                           style: blackTextStyle.copyWith(
                             fontWeight: medium,
                           ),
@@ -109,21 +103,15 @@ class ForgotPage extends StatelessWidget {
                           height: 8,
                         ),
                         TextFormField(
-                          controller: emailController,
+                          controller: usernameController,
                           validator: (value) {
                             if (value == null || value.isEmpty) {
-                              return 'Please enter your email';
+                              return 'Please enter your username';
                             }
-                            // if (!emailRegex.hasMatch(value)) {
-                            //   return 'Please enter a valid email';
-                            // }
                             return null;
                           },
                           decoration: const InputDecoration(
                             contentPadding: EdgeInsets.all(4),
-                            // border: OutlineInputBorder(
-                            //   borderRadius: BorderRadius.circular(14)
-                            // ),
                           ),
                         )
                       ],
@@ -141,17 +129,7 @@ class ForgotPage extends StatelessWidget {
                         onPressed: () {
                           if (_formKey.currentState!.validate()) {
                             ForgotPasswordController.requestOTP(
-                                context, emailController);
-
-                            // Navigator.of(context).pop();
-                            // String enteredEmail = emailController.text;
-                            // Navigator.of(context).push(
-                            //   MaterialPageRoute(
-                            //     builder: (context) {
-                            //       return OtpPage(email: enteredEmail);
-                            //     },
-                            //   ),
-                            // );
+                                context, usernameController);
                           }
                         },
                         style: TextButton.styleFrom(

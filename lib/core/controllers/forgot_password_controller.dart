@@ -4,60 +4,63 @@ import '../services/forgot_password_service.dart';
 
 class ForgotPasswordController extends GetxController {
   static Future<void> requestOTP(
-      BuildContext context, TextEditingController emailController) async {
+      BuildContext context, TextEditingController usernameController) async {
     try {
-      if (emailController.text.isEmpty) {
-        throw 'Email harus diisi.';
+      if (usernameController.text.isEmpty) {
+        throw 'Username harus diisi.';
       }
 
-      await ForgotPasswordService.requestOTP(emailController.text);
+      // Dapatkan respons dari API dan simpan pesan
+      final response = await ForgotPasswordService.requestOTP(usernameController.text);
+      final message = response['meta']['message'];
+
       Get.snackbar(
         'Success',
-        'Kode OTP telah dikirimkan ke email Anda',
-        duration: Duration(seconds: 2),
+        message,
+        duration: const Duration(seconds: 2),
         backgroundColor: Colors.green,
         colorText: Colors.white,
       );
 
-      // Navigasi ke halaman OTP dengan email sebagai argumen
-      await Get.toNamed('/otp', arguments: {'email': emailController.text});
+      // Navigasi ke halaman OTP dengan username dan pesan sebagai argumen
+      await Get.toNamed('/otp', arguments: {'username': usernameController.text, 'message': message});
     } catch (error) {
       print(error.toString());
       Get.snackbar(
         'Error',
         error.toString(),
-        duration: Duration(seconds: 2),
+        duration: const Duration(seconds: 2),
         backgroundColor: Colors.red,
         colorText: Colors.white,
       );
     }
   }
 
-  static Future<void> verifyOTP(BuildContext context,
-      TextEditingController otpController, String email) async {
+  static Future<void> verifyOTP(
+      BuildContext context, TextEditingController otpController, String username) async {
     try {
       if (otpController.text.isEmpty) {
         throw 'OTP harus diisi.';
       }
 
-      await ForgotPasswordService.verifyOTP(email, otpController.text);
+      await ForgotPasswordService.verifyOTP(username, otpController.text);
       Get.snackbar(
         'Success',
         'OTP berhasil diverifikasi',
-        duration: Duration(seconds: 2),
+        duration: const Duration(seconds: 2),
         backgroundColor: Colors.green,
         colorText: Colors.white,
       );
 
-      // Navigasi ke halaman reset password dengan email dan otp sebagai argumen
+      // Navigasi ke halaman reset password dengan username dan otp sebagai argumen
       await Get.toNamed('/reset-password',
-          arguments: {'email': email, 'otp': otpController.text});
+          arguments: {'username': username, 'otp': otpController.text});
     } catch (error) {
       print(error.toString());
       Get.snackbar(
         'Error',
         error.toString(),
-        duration: Duration(seconds: 2),
+        duration: const Duration(seconds: 2),
         backgroundColor: Colors.red,
         colorText: Colors.white,
       );
@@ -67,7 +70,7 @@ class ForgotPasswordController extends GetxController {
   static Future<void> resetPassword(
       BuildContext context,
       TextEditingController newPasswordController,
-      String email,
+      String username,
       String otp) async {
     try {
       if (newPasswordController.text.isEmpty) {
@@ -75,23 +78,23 @@ class ForgotPasswordController extends GetxController {
       }
 
       await ForgotPasswordService.resetPassword(
-          email, otp, newPasswordController.text);
+          username, otp, newPasswordController.text);
       Get.snackbar(
         'Success',
         'Password berhasil direset',
-        duration: Duration(seconds: 2),
+        duration: const Duration(seconds: 2),
         backgroundColor: Colors.green,
         colorText: Colors.white,
       );
 
-      // Navigasi ke halaman login
-      await Get.toNamed('/login');
+      // Navigasi kembali ke halaman login setelah reset password
+      await Get.offAllNamed('/login');
     } catch (error) {
       print(error.toString());
       Get.snackbar(
         'Error',
         error.toString(),
-        duration: Duration(seconds: 2),
+        duration: const Duration(seconds: 2),
         backgroundColor: Colors.red,
         colorText: Colors.white,
       );

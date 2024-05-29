@@ -4,7 +4,10 @@ import 'package:flutter/material.dart';
 import '../../shared/theme.dart';
 
 class ResetPasswordPage extends StatelessWidget {
-  const ResetPasswordPage({super.key});
+   final String username;
+  final String otp;
+
+  const ResetPasswordPage({required this.username, required this.otp, Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

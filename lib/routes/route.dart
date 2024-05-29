@@ -14,20 +14,20 @@ class RouteApp {
       name: '/otp',
       page: () {
         final args = Get.arguments as Map<String, dynamic>;
-        final email = args['email'] as String;
-        return OtpPage(email: email);
+        final username = args['username'] as String;
+        final message = args['message'] as String;
+        return OtpPage(username: username, message: message);
       },
     ),
-    GetPage(name: '/reset-password', page: () => const ResetPasswordPage()),
-    // GetPage(
-    //   name: '/reset-password',
-    //   page: () {
-    //     final args = Get.arguments as Map<String, dynamic>;
-    //     final email = args['email'] as String;
-    //     final otp = args['otp'] as String;
-    //     return ResetPasswordPage(email: email, otp: otp);
-    //   },
-    // ),
+    GetPage(
+      name: '/reset-password',
+      page: () {
+        final args = Get.arguments as Map<String, dynamic>;
+        final username = args['username'] as String;
+        final otp = args['otp'] as String;
+        return ResetPasswordPage(username: username, otp: otp);
+      },
+    ),
     GetPage(name: '/home', page: () => const HomePage()),
   ];
 }
