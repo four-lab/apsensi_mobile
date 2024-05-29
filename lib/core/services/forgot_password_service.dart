@@ -33,18 +33,21 @@ class ForgotPasswordService {
     }
   }
 
-  static Future<void> resetPassword(
+  static Future<Map<String, dynamic>> resetPassword(
       String username, String otp, String newPassword) async {
     final response = await http.post(
       Uri.parse(urlApi.resetPassword()),
       headers: {
         'Content-Type': 'application/json',
       },
-      body: jsonEncode({'username': username, 'otp': otp, 'new_password': newPassword}),
+      body: jsonEncode(
+          {'username': username, 'code': otp, 'password': newPassword}),
     );
 
     if (response.statusCode != 200) {
       throw Exception('Failed to reset password');
     }
+
+    return jsonDecode(response.body);
   }
 }

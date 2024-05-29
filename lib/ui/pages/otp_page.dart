@@ -66,20 +66,20 @@ class OtpPage extends StatelessWidget {
                     fontWeight: superlight,
                   ),
                 ),
-                Text(
-                  username,
-                  textAlign: TextAlign.center,
-                  style: blackTextStyle.copyWith(
-                    fontSize: 14,
-                    fontWeight: FontWeight.bold,
-                    decoration: TextDecoration.underline,
-                  ),
-                ),
+                // Text(
+                //   username,
+                //   textAlign: TextAlign.center,
+                //   style: blackTextStyle.copyWith(
+                //     fontSize: 14,
+                //     fontWeight: FontWeight.bold,
+                //     decoration: TextDecoration.underline,
+                //   ),
+                // ),
               ],
             ),
             const SizedBox(height: 20),
             Text(
-              message,
+              '*Pastikan kode OTP yang anda masukkan sesuai',
               textAlign: TextAlign.left,
               style: blackTextStyle.copyWith(
                 fontSize: 11,

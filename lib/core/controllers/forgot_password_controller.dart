@@ -11,7 +11,8 @@ class ForgotPasswordController extends GetxController {
       }
 
       // Dapatkan respons dari API dan simpan pesan
-      final response = await ForgotPasswordService.requestOTP(usernameController.text);
+      final response =
+          await ForgotPasswordService.requestOTP(usernameController.text);
       final message = response['meta']['message'];
 
       Get.snackbar(
@@ -23,7 +24,8 @@ class ForgotPasswordController extends GetxController {
       );
 
       // Navigasi ke halaman OTP dengan username dan pesan sebagai argumen
-      await Get.toNamed('/otp', arguments: {'username': usernameController.text, 'message': message});
+      await Get.toNamed('/otp',
+          arguments: {'username': usernameController.text, 'message': message});
     } catch (error) {
       print(error.toString());
       Get.snackbar(
@@ -36,8 +38,8 @@ class ForgotPasswordController extends GetxController {
     }
   }
 
-  static Future<void> verifyOTP(
-      BuildContext context, TextEditingController otpController, String username) async {
+  static Future<void> verifyOTP(BuildContext context,
+      TextEditingController otpController, String username) async {
     try {
       if (otpController.text.isEmpty) {
         throw 'OTP harus diisi.';
@@ -77,18 +79,23 @@ class ForgotPasswordController extends GetxController {
         throw 'Password baru harus diisi.';
       }
 
-      await ForgotPasswordService.resetPassword(
+      final response = await ForgotPasswordService.resetPassword(
           username, otp, newPasswordController.text);
-      Get.snackbar(
-        'Success',
-        'Password berhasil direset',
-        duration: const Duration(seconds: 2),
-        backgroundColor: Colors.green,
-        colorText: Colors.white,
-      );
 
-      // Navigasi kembali ke halaman login setelah reset password
-      await Get.offAllNamed('/login');
+      if (response['meta']['code'] == 200) {
+        Get.snackbar(
+          'Success',
+          response['meta']['message'],
+          duration: const Duration(seconds: 2),
+          backgroundColor: Colors.green,
+          colorText: Colors.white,
+        );
+
+        // Navigasi kembali ke halaman login setelah reset password
+        await Get.offAllNamed('/login');
+      } else {
+        throw response['meta']['message'];
+      }
     } catch (error) {
       print(error.toString());
       Get.snackbar(
