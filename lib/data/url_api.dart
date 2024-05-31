@@ -20,4 +20,8 @@ class urlApi {
   static String resetPassword() {
     return baseUrl + '/reset-password';
   }
+
+  static String getHolidays() {
+    return baseUrl + '/holidays';
+  }
 }
