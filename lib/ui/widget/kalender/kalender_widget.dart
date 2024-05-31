@@ -53,116 +53,112 @@ class _KalenderWidgetState extends State<KalenderWidget> {
   }
 
   Widget tableCalendar() {
-    return Container(
-      margin: const EdgeInsets.only(top: 15),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(20),
-        color: Colors.white,
-        boxShadow: [
-          BoxShadow(
-            color: Colors.grey.withOpacity(0.5),
-            spreadRadius: 3,
-            blurRadius: 5,
-            offset: const Offset(3, 3),
-          ),
-        ],
-      ),
-      child: TableCalendar(
-        calendarBuilders: CalendarBuilders(
-          defaultBuilder: (context, date, _) {
-            if (widget.holidayDates.contains(date)) {
-              return Container(
-                margin: const EdgeInsets.all(5.0),
-                child: Center(
-                  child: Text(
-                    date.day.toString(),
-                    style: const TextStyle(color: Colors.red),
-                  ),
-                ),
-              );
-            } else if (widget.holidaysInMonth.any((holiday) => isSameDay(holiday.dateStart, date))) {
-              return Container(
-                margin: const EdgeInsets.all(5.0),
-                child: Center(
-                  child: Text(
-                    date.day.toString(),
-                    style: const TextStyle(color: Colors.red),
-                  ),
-                ),
-              );
-            } else if (date.weekday == DateTime.sunday || date.weekday == DateTime.saturday) {
-              return Container(
-                margin: const EdgeInsets.all(5.0),
-                child: Center(
-                  child: Text(
-                    date.day.toString(),
-                    style: const TextStyle(color: Colors.red),
-                  ),
-                ),
-              );
-            } else {
-              return Container(
-                margin: const EdgeInsets.all(5.0),
-                child: Center(
-                  child: Text(
-                    date.day.toString(),
-                    style: const TextStyle(color: Colors.black),
-                  ),
-                ),
-              );
-            }
-          },
-          todayBuilder: (context, day, focusedDay) {
-            if (widget.isToday(day)) {
-              return Container(
-                margin: const EdgeInsets.all(5.0),
-                decoration: BoxDecoration(
-                  color: Colors.blue,
-                  borderRadius: BorderRadius.circular(50.0),
-                ),
-                child: Center(
-                  child: Text(
-                    day.day.toString(),
-                    style: TextStyle(color: Colors.white),
-                  ),
-                ),
-              );
-            } else {
-              return null;
-            }
-          },
-          dowBuilder: (context, day) {
-            if (day.weekday == DateTime.sunday || day.weekday == DateTime.saturday) {
-              final text = DateFormat.E().format(day);
-              return Center(
-                child: Text(
-                  text,
-                  style: const TextStyle(color: Colors.red),
-                ),
-              );
-            } else {
-              return Center(
-                child: Text(
-                  DateFormat.E().format(day),
-                  style: const TextStyle(color: Colors.black),
-                ),
-              );
-            }
-          },
+  return Container(
+    margin: const EdgeInsets.only(top: 15),
+    decoration: BoxDecoration(
+      borderRadius: BorderRadius.circular(20),
+      color: Colors.white,
+      boxShadow: [
+        BoxShadow(
+          color: Colors.grey.withOpacity(0.5),
+          spreadRadius: 3,
+          blurRadius: 5,
+          offset: const Offset(3, 3),
         ),
-        headerStyle: const HeaderStyle(
-          formatButtonVisible: false,
-          titleCentered: true,
-        ),
-        focusedDay: widget.focusedDay,
-        firstDay: DateTime(2021, 01, 01),
-        lastDay: DateTime(2030, 12, 31),
-        onPageChanged: (newFocusedDay) {
-          widget.onMonthChanged(newFocusedDay);
+      ],
+    ),
+    child: TableCalendar(
+      calendarBuilders: CalendarBuilders(
+        defaultBuilder: (context, date, _) {
+          Color? textColor;
+          // Mengecek apakah tanggal ini adalah hari libur
+          for (var holiday in widget.holidaysInMonth) {
+            if (date.isAfter(holiday.dateStart.subtract(const Duration(days: 0))) &&
+                date.isBefore(holiday.dateEnd.add(const Duration(days: 1)))) {
+              // Pengecualian untuk hari Sabtu dan Minggu
+              if (holiday.type == 'educational' && (date.weekday == DateTime.saturday || date.weekday == DateTime.sunday)) {
+                continue;
+              }
+              textColor = holiday.type == 'educational' ? Colors.green : Colors.red;
+              break;
+            }
+          }
+          if (textColor != null) {
+            return Container(
+              margin: const EdgeInsets.all(5.0),
+              child: Center(
+                child: Text(
+                  date.day.toString(),
+                  style: TextStyle(color: textColor),
+                ),
+              ),
+            );
+          } else {
+            return Container(
+              margin: const EdgeInsets.all(5.0),
+              child: Center(
+                child: Text(
+                  date.day.toString(),
+                  style: date.weekday == DateTime.sunday || date.weekday == DateTime.saturday
+                      ? const TextStyle(color: Colors.red)
+                      : const TextStyle(color: Colors.black),
+                ),
+              ),
+            );
+          }
+        },
+        todayBuilder: (context, day, focusedDay) {
+          if (widget.isToday(day)) {
+            return Container(
+              margin: const EdgeInsets.all(5.0),
+              decoration: BoxDecoration(
+                color: Colors.blue,
+                borderRadius: BorderRadius.circular(50.0),
+              ),
+              child: Center(
+                child: Text(
+                  day.day.toString(),
+                  style: const TextStyle(color: Colors.white),
+                ),
+              ),
+            );
+          } else {
+            return null;
+          }
+        },
+        dowBuilder: (context, day) {
+          if (day.weekday == DateTime.sunday || day.weekday == DateTime.saturday) {
+            final text = DateFormat.E().format(day);
+            return Center(
+              child: Text(
+                text,
+                style: const TextStyle(color: Colors.red),
+              ),
+            );
+          } else {
+            return Center(
+              child: Text(
+                DateFormat.E().format(day),
+                style: const TextStyle(color: Colors.black),
+              ),
+            );
+          }
         },
       ),
-    );
-  }
+      headerStyle: const HeaderStyle(
+        formatButtonVisible: false,
+        titleCentered: true,
+      ),
+      focusedDay: widget.focusedDay,
+      firstDay: DateTime(2021, 01, 01),
+      lastDay: DateTime(2030, 12, 31),
+      onPageChanged: (newFocusedDay) {
+        widget.onMonthChanged(newFocusedDay);
+      },
+    ),
+  );
+}
+
 
   Widget eventInMonth() {
     final filteredHolidays = widget.holidaysInMonth.where((holiday) =>
