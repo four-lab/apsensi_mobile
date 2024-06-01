@@ -49,7 +49,7 @@ class AuthService {
     }
   }
 
-  static Future<User?> getUser(String token) async {
+  static Future<User?> fetchUserData(String token) async {
   final url = Uri.parse('${Constant.baseUrl}/user');
   print('Fetch user token: $token');
   final response = await http.get(

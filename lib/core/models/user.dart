@@ -1,8 +1,3 @@
-import 'dart:convert';
-import 'package:apsensi_mobile/core/utils/constant.dart';
-import 'package:http/http.dart' as http;
-
-
 class User {
   final int? id;
   final String? fullname;

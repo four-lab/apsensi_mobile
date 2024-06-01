@@ -26,7 +26,7 @@ class AuthController {
           colorText: Colors.white,
         );
 
-        await fetchUserData();
+        await getUser();
 
         await Get.toNamed('/home');
     } catch (error) {
@@ -60,10 +60,10 @@ class AuthController {
     }
   }
 
-  static Future<void> fetchUserData() async {
+  static Future<void> getUser() async {
     try {
       String? token = await Constant.getToken();
-      User? user = await AuthService.getUser(token!);
+      User? user = await AuthService.fetchUserData(token!);
       if (user != null) {
         // print('User data: ${user.toJson()}');
       } else {
