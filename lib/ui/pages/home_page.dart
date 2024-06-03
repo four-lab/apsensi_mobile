@@ -13,13 +13,24 @@ import 'calendar_page.dart';
 import 'perizinan_page.dart';
 import 'presensi_page.dart';
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
-    final authController = Get.put(AuthController());
+  _HomePageState createState() => _HomePageState();
+}
 
+class _HomePageState extends State<HomePage> {
+  final AuthController authController = Get.put(AuthController());
+
+  @override
+  void initState() {
+    super.initState();
+    authController.loadUserFromPrefs(); // Load user data from SharedPreferences
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: transparentBackground,
       bottomNavigationBar: BottomAppBar(
@@ -144,64 +155,64 @@ class HomePage extends StatelessWidget {
       }),
     );
   }
-}
 
-Widget buildProfile(BuildContext context, User user) {
-  return Container(
-    margin: const EdgeInsets.only(
-      top: 40,
-    ),
-    child: Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              'Hello,',
-              style: whiteTextStyle.copyWith(
-                fontSize: 19,
-                fontWeight: bold,
+  Widget buildProfile(BuildContext context, User user) {
+    return Container(
+      margin: const EdgeInsets.only(
+        top: 40,
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                'Hello,',
+                style: whiteTextStyle.copyWith(
+                  fontSize: 19,
+                  fontWeight: bold,
+                ),
               ),
-            ),
-            const SizedBox(
-              height: 2,
-            ),
-            Text(
-              user.fullname ?? 'Guest',
-              style: whiteTextStyle.copyWith(
-                fontSize: 19,
-                fontWeight: bold,
+              const SizedBox(
+                height: 2,
               ),
-            ),
-            const SizedBox(
-              height: 2,
-            ),
-            Text(
-              user.nik ?? 'No NIK',
-              style: whiteTextStyle.copyWith(
-                fontSize: 10,
-                fontWeight: semibold,
+              Text(
+                user.fullname ?? 'Guest',
+                style: whiteTextStyle.copyWith(
+                  fontSize: 19,
+                  fontWeight: bold,
+                ),
               ),
-            ),
-          ],
-        ),
-        GestureDetector(
-          onTap: () {
-            Navigator.push(context,
-                MaterialPageRoute(builder: (context) => ProfilePage()));
-          },
-          child: Container(
-            width: 40,
-            height: 40,
-            decoration: const BoxDecoration(
-              shape: BoxShape.circle,
-              image: DecorationImage(
-                  image: AssetImage('assets/home/profil_picture.png')),
-            ),
+              const SizedBox(
+                height: 2,
+              ),
+              Text(
+                user.nik ?? 'No NIK',
+                style: whiteTextStyle.copyWith(
+                  fontSize: 10,
+                  fontWeight: semibold,
+                ),
+              ),
+            ],
           ),
-        )
-      ],
-    ),
-  );
+          GestureDetector(
+            onTap: () {
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => ProfilePage()));
+            },
+            child: Container(
+              width: 40,
+              height: 40,
+              decoration: const BoxDecoration(
+                shape: BoxShape.circle,
+                image: DecorationImage(
+                    image: AssetImage('assets/home/profil_picture.png')),
+              ),
+            ),
+          )
+        ],
+      ),
+    );
+  }
 }

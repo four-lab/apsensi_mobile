@@ -1,13 +1,20 @@
+import 'dart:convert';
 import 'package:apsensi_mobile/core/models/user.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:apsensi_mobile/core/utils/constant.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:get/get.dart';
 import 'package:apsensi_mobile/core/services/auth_service.dart';
+import 'package:apsensi_mobile/core/utils/constant.dart';
 
 class AuthController extends GetxController {
   var user = User().obs;
+
+  @override
+  void onInit() {
+    super.onInit();
+    loadUserFromPrefs();
+  }
 
   static Future<void> login(BuildContext context,
       TextEditingController username, TextEditingController password) async {
@@ -19,6 +26,9 @@ class AuthController extends GetxController {
       await AuthService.login(username.text, password.text);
       SharedPreferences prefs = await SharedPreferences.getInstance();
       await prefs.setBool('login', true);
+
+      await getUser();
+
       Get.snackbar(
         'Success',
         'Login berhasil',
@@ -26,8 +36,6 @@ class AuthController extends GetxController {
         backgroundColor: Colors.green,
         colorText: Colors.white,
       );
-
-      await getUser();
 
       await Get.toNamed('/home');
     } catch (error) {
@@ -47,6 +55,7 @@ class AuthController extends GetxController {
     try {
       SharedPreferences prefs = await SharedPreferences.getInstance();
       await prefs.remove('login');
+      await prefs.remove('user'); // Hapus data pengguna dari shared preferences
       await AuthService.logout(preferences);
       Get.offAllNamed('/login');
     } catch (error) {
@@ -66,7 +75,10 @@ class AuthController extends GetxController {
       String? token = await Constant.getToken();
       User? user = await AuthService.fetchUserData(token!);
       if (user != null) {
-        Get.find<AuthController>().user.value = user;
+        final controller = Get.find<AuthController>();
+        controller.user.value = user;
+        controller.saveUserToPrefs(
+            user); // Simpan data pengguna ke shared preferences
       } else {
         print('No user data fetched');
       }
@@ -80,5 +92,18 @@ class AuthController extends GetxController {
         colorText: Colors.white,
       );
     }
+  }
+
+  Future<void> loadUserFromPrefs() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? userJson = prefs.getString('user');
+    if (userJson != null) {
+      user.value = User.fromJson(jsonDecode(userJson));
+    }
+  }
+
+  Future<void> saveUserToPrefs(User user) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setString('user', jsonEncode(user.toJson()));
   }
 }
