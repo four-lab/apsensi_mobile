@@ -1,28 +1,28 @@
 class User {
-  final int? id;
-  final String? fullname;
-  final String? birthdate;
-  final String? birthplace;
-  final String? username;
-  final String? email;
-  final String? nik;
-  final String? address;
-  final String? gender;
-  final EmployeePhotos? photos;
-  final String? createdAt;
-  final String? updatedAt;
+  int? id;
+  String? nik;
+  String? email;
+  String? username;
+  String? fullname;
+  String? birthplace;
+  String? birthdate;
+  Photos? photos;
+  String? gender;
+  String? address;
+  int? createdAt;
+  int? updatedAt;
 
   User({
     this.id,
-    this.fullname,
-    this.birthdate,
-    this.birthplace,
-    this.username,
-    this.email,
     this.nik,
-    this.address,
-    this.gender,
+    this.email,
+    this.username,
+    this.fullname,
+    this.birthplace,
+    this.birthdate,
     this.photos,
+    this.gender,
+    this.address,
     this.createdAt,
     this.updatedAt,
   });
@@ -30,15 +30,15 @@ class User {
   factory User.fromJson(Map<String, dynamic> json) {
     return User(
       id: json['id'],
-      fullname: json['fullname'],
-      birthdate: json['birthdate'],
-      birthplace: json['birthplace'],
-      username: json['username'],
-      email: json['email'],
       nik: json['nik'],
-      address: json['address'],
+      email: json['email'],
+      username: json['username'],
+      fullname: json['fullname'],
+      birthplace: json['birthplace'],
+      birthdate: json['birthdate'],
+      photos: json['photos'] != null ? Photos.fromJson(json['photos']) : null,
       gender: json['gender'],
-      photos: json['photos'] != null ? EmployeePhotos.fromJson(json['photos']) : null,
+      address: json['address'],
       createdAt: json['created_at'],
       updatedAt: json['updated_at'],
     );
@@ -47,30 +47,30 @@ class User {
   Map<String, dynamic> toJson() {
     return {
       'id': id,
-      'fullname': fullname,
-      'birthdate': birthdate,
-      'birthplace': birthplace,
-      'username': username,
-      'email': email,
       'nik': nik,
-      'address': address,
-      'gender': gender,
+      'email': email,
+      'username': username,
+      'fullname': fullname,
+      'birthplace': birthplace,
+      'birthdate': birthdate,
       'photos': photos?.toJson(),
+      'gender': gender,
+      'address': address,
       'created_at': createdAt,
       'updated_at': updatedAt,
     };
   }
 }
 
-class EmployeePhotos {
-  final String? front;
-  final String? left;
-  final String? right;
+class Photos {
+  String? front;
+  String? left;
+  String? right;
 
-  EmployeePhotos({this.front, this.left, this.right});
+  Photos({this.front, this.left, this.right});
 
-  factory EmployeePhotos.fromJson(Map<String, dynamic> json) {
-    return EmployeePhotos(
+  factory Photos.fromJson(Map<String, dynamic> json) {
+    return Photos(
       front: json['front'],
       left: json['left'],
       right: json['right'],

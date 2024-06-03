@@ -5,16 +5,21 @@ import 'package:flutter/widgets.dart';
 import 'package:apsensi_mobile/ui/widget/home/profile_widget.dart';
 import 'package:apsensi_mobile/ui/widget/home/status_presensi_widget.dart';
 import 'package:apsensi_mobile/ui/widget/home/jadwal_hari_ini_widget.dart';
+import 'package:apsensi_mobile/core/models/user.dart';
+import 'package:get/get.dart';
+import 'package:apsensi_mobile/core/controllers/auth_controller.dart';
 import 'jadwal_page.dart';
 import 'calendar_page.dart';
 import 'perizinan_page.dart';
 import 'presensi_page.dart';
 
 class HomePage extends StatelessWidget {
-  const HomePage({Key? key});
+  const HomePage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final authController = Get.put(AuthController());
+
     return Scaffold(
       backgroundColor: transparentBackground,
       bottomNavigationBar: BottomAppBar(
@@ -124,16 +129,79 @@ class HomePage extends StatelessWidget {
         ),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      body: ListView(
-        padding: const EdgeInsetsDirectional.symmetric(
-          horizontal: 34,
-        ),
-        children: [
-          buildProfile(context),
-          buildCardStatusPresensi(),
-          buildCardJadwalHariIni(),
-        ],
-      ),
+      body: Obx(() {
+        final user = authController.user.value;
+        return ListView(
+          padding: const EdgeInsetsDirectional.symmetric(
+            horizontal: 34,
+          ),
+          children: [
+            buildProfile(context, user),
+            buildCardStatusPresensi(),
+            buildCardJadwalHariIni(),
+          ],
+        );
+      }),
     );
   }
+}
+
+Widget buildProfile(BuildContext context, User user) {
+  return Container(
+    margin: const EdgeInsets.only(
+      top: 40,
+    ),
+    child: Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'Hello,',
+              style: whiteTextStyle.copyWith(
+                fontSize: 19,
+                fontWeight: bold,
+              ),
+            ),
+            const SizedBox(
+              height: 2,
+            ),
+            Text(
+              user.fullname ?? 'Guest',
+              style: whiteTextStyle.copyWith(
+                fontSize: 19,
+                fontWeight: bold,
+              ),
+            ),
+            const SizedBox(
+              height: 2,
+            ),
+            Text(
+              user.nik ?? 'No NIK',
+              style: whiteTextStyle.copyWith(
+                fontSize: 10,
+                fontWeight: semibold,
+              ),
+            ),
+          ],
+        ),
+        GestureDetector(
+          onTap: () {
+            Navigator.push(context,
+                MaterialPageRoute(builder: (context) => ProfilePage()));
+          },
+          child: Container(
+            width: 40,
+            height: 40,
+            decoration: const BoxDecoration(
+              shape: BoxShape.circle,
+              image: DecorationImage(
+                  image: AssetImage('assets/home/profil_picture.png')),
+            ),
+          ),
+        )
+      ],
+    ),
+  );
 }
