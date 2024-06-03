@@ -42,13 +42,14 @@ class _ScheduleTimelineState extends State<ScheduleTimeline> {
   }
 
   Widget _buildScheduleRow(Schedule schedule, DateTime now) {
+    final scheduleDate = schedule.getScheduleDate(now);
     final startTime  = DateTime(
-      now.year, now.month, now.day,
+      scheduleDate.year, scheduleDate.month, scheduleDate.day,
       int.parse(schedule.timeStart.split(':')[0]),
       int.parse(schedule.timeStart.split(':')[1]),
     );
     final endTime = DateTime(
-      now.year, now.month, now.day,
+      scheduleDate.year, scheduleDate.month, scheduleDate.day,
       int.parse(schedule.timeEnd.split(':')[0]),
       int.parse(schedule.timeEnd.split(':')[1]),
     );
@@ -57,7 +58,7 @@ class _ScheduleTimelineState extends State<ScheduleTimeline> {
       endTime.add(Duration(days: 1));
     }
 
-    final isActive = now.isAfter(startTime) && now.isBefore(endTime);
+    final isActive = now.isAfter(startTime) && now.isBefore(endTime) && now.day == scheduleDate.day;
 
     return Row(
             crossAxisAlignment: CrossAxisAlignment.start,

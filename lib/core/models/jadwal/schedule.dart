@@ -52,4 +52,10 @@ class Schedule {
     final minute = time.minute.toString().padLeft(2, '0');
     return '$hour:$minute';
   }
+
+  DateTime getScheduleDate(DateTime currentDate) {
+    final today = currentDate.weekday;
+    final daysDifference = (day - today) % 7;
+    return currentDate.add(Duration(days: daysDifference));
+  }
 }
