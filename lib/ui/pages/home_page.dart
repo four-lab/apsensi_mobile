@@ -148,7 +148,7 @@ class _HomePageState extends State<HomePage> {
           ),
           children: [
             buildProfile(context, user),
-            buildCardStatusPresensi(),
+            buildCardStatusPresensi(context),
             buildCardJadwalHariIni(),
           ],
         );
