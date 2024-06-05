@@ -6,9 +6,13 @@ import 'package:apsensi_mobile/ui/widget/launcher.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:intl/date_symbol_data_local.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  // Initialize locale data for Indonesian locale
+  await initializeDateFormatting('id_ID', null);
   SharedPreferences prefs = await SharedPreferences.getInstance();
 
   runApp(MyApp(prefs: prefs));
