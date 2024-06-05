@@ -11,7 +11,7 @@ Widget buildCardStatusPresensi(BuildContext context) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
-        Future.delayed(Duration(seconds: 2), () {
+        Future.delayed(Duration(seconds: 10), () {
           Navigator.of(context).pop(true);
         });
         return AlertDialog(
