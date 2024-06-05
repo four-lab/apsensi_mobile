@@ -204,13 +204,18 @@ class _HomePageState extends State<HomePage> {
             child: Container(
               width: 40,
               height: 40,
-              decoration: const BoxDecoration(
+              decoration: BoxDecoration(
                 shape: BoxShape.circle,
                 image: DecorationImage(
-                    image: AssetImage('assets/home/profil_picture.png')),
+                  image: user.photos?.front != null
+                      ? NetworkImage(user.photos!.front!)
+                      : AssetImage('assets/home/profil_picture.png')
+                          as ImageProvider, // URL gambar dari API atau gambar default
+                  fit: BoxFit.cover,
+                ),
               ),
             ),
-          )
+          ),
         ],
       ),
     );

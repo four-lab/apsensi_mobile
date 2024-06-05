@@ -11,7 +11,7 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   SharedPreferences prefs = await SharedPreferences.getInstance();
 
-  runApp( MyApp(prefs: prefs));
+  runApp(MyApp(prefs: prefs));
 }
 
 class MyApp extends StatelessWidget {
@@ -27,6 +27,9 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       home: const launcher(),
       getPages: RouteApp.pages,
+      initialBinding: BindingsBuilder(() {
+        Get.put(AuthController());
+      }),
     );
   }
 }

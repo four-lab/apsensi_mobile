@@ -4,7 +4,8 @@ import 'package:apsensi_mobile/shared/theme.dart';
 Widget buildCardStatusPresensi() {
   return Container(
       width: double.infinity,
-      height: 149,
+      // height: 149,
+      height: 130,
       margin: const EdgeInsets.only(
         top: 26,
       ),
@@ -42,22 +43,22 @@ Widget buildCardStatusPresensi() {
               fontWeight: bold,
             ),
           ),
-          const SizedBox(
-            height: 10,
-          ),
-          SizedBox(
-            width: double.infinity,
-            height: 30,
-            child: ElevatedButton(
-              onPressed: () {},
-              style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color(0xff0099FF)),
-              child: Text(
-                'Check In',
-                style: TextStyle(fontSize: 10, fontWeight: bold),
-              ),
-            ),
-          ),
+          // const SizedBox(
+          //   height: 10,
+          // ),
+          // SizedBox(
+          //   width: double.infinity,
+          //   height: 30,
+          //   child: ElevatedButton(
+          //     onPressed: () {},
+          //     style: ElevatedButton.styleFrom(
+          //         backgroundColor: const Color(0xff0099FF)),
+          //     child: Text(
+          //       'Check In',
+          //       style: TextStyle(fontSize: 10, fontWeight: bold),
+          //     ),
+          //   ),
+          // ),
         ],
       ));
 }
