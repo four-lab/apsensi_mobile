@@ -37,7 +37,7 @@ class AuthController extends GetxController {
         colorText: Colors.white,
       );
 
-      await Get.toNamed('/home');
+      await Get.offAllNamed('/home'); // Clear navigation stack and go to home
     } catch (error) {
       print(error.toString());
       Get.snackbar(
