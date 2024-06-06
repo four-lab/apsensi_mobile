@@ -1,8 +1,9 @@
+import 'package:apsensi_mobile/core/models/user.dart';
 import 'package:flutter/material.dart';
 import 'package:apsensi_mobile/shared/theme.dart';
 import 'package:apsensi_mobile/ui/pages/profile_page.dart';
 
-Widget buildProfile(BuildContext context) {
+Widget buildProfile(BuildContext context, User user) {
   return Container(
     margin: const EdgeInsets.only(
       top: 40,
@@ -24,7 +25,7 @@ Widget buildProfile(BuildContext context) {
               height: 2,
             ),
             Text(
-              'Irsyadul Ibad',
+              user.fullname ?? 'Guest',
               style: whiteTextStyle.copyWith(
                 fontSize: 19,
                 fontWeight: bold,
@@ -34,7 +35,7 @@ Widget buildProfile(BuildContext context) {
               height: 2,
             ),
             Text(
-              '3456245678',
+              user.nik ?? 'No NIK',
               style: whiteTextStyle.copyWith(
                 fontSize: 10,
                 fontWeight: semibold,
@@ -50,13 +51,18 @@ Widget buildProfile(BuildContext context) {
           child: Container(
             width: 40,
             height: 40,
-            decoration: const BoxDecoration(
+            decoration: BoxDecoration(
               shape: BoxShape.circle,
               image: DecorationImage(
-                  image: AssetImage('assets/home/profil_picture.png')),
+                image: user.photos?.front != null
+                    ? NetworkImage(user.photos!.front!)
+                    : AssetImage('assets/home/profil_picture.png')
+                        as ImageProvider, // URL gambar dari API atau gambar default
+                fit: BoxFit.cover,
+              ),
             ),
           ),
-        )
+        ),
       ],
     ),
   );

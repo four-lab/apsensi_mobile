@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:apsensi_mobile/shared/theme.dart';
-import 'package:apsensi_mobile/ui/widget/home/status_presensi_widget.dart';
+import 'package:apsensi_mobile/ui/widget/presensi/presensi_widget.dart';
 
 class PresensiPage extends StatelessWidget {
   const PresensiPage({Key? key}) : super(key: key);
@@ -31,7 +31,7 @@ class PresensiPage extends StatelessWidget {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            buildCardStatusPresensi(context),
+            buildPresensi(context),
             const SizedBox(height: 20),
             Container(
               margin: const EdgeInsets.symmetric(horizontal: 16),
