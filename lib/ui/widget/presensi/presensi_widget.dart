@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:apsensi_mobile/shared/theme.dart';
 import 'package:intl/intl.dart';
+import 'package:m7_livelyness_detection/index.dart';
 
 Widget buildPresensi(BuildContext context) {
   String currentDate =
       DateFormat('EEEE, dd MMMM yyyy', 'id_ID').format(DateTime.now());
 
-  // Fungsi untuk menampilkan dialog
-  void showSuccessDialog(BuildContext context) {
+  void showSuccessDialog() {
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -66,6 +66,17 @@ Widget buildPresensi(BuildContext context) {
         );
       },
     );
+  }
+
+  void _startPresence() async {
+    final M7CapturedImage? detectionResponse =
+    await M7LivelynessDetection.instance.detectLivelyness(context,
+        config: M7DetectionConfig(steps: [
+          M7LivelynessStepItem(step: M7LivelynessStep.blink, title: "Kedipkan Mata", isCompleted: false)
+        ]));
+
+    if(detectionResponse != null)
+      showSuccessDialog();
   }
 
   return Container(
@@ -127,9 +138,7 @@ Widget buildPresensi(BuildContext context) {
           width: double.infinity,
           height: 30,
           child: ElevatedButton(
-            onPressed: () {
-              showSuccessDialog(context);
-            },
+            onPressed: () => _startPresence(),
             style: ElevatedButton.styleFrom(
               backgroundColor: const Color(0xff0099FF),
             ),
