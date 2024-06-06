@@ -2,7 +2,7 @@ import 'package:apsensi_mobile/ui/pages/profile_page.dart';
 import 'package:flutter/material.dart';
 import 'package:apsensi_mobile/shared/theme.dart';
 import 'package:flutter/widgets.dart';
-import 'package:apsensi_mobile/ui/widget/home/profile_widget.dart';
+// import 'package:apsensi_mobile/ui/widget/home/profile_widget.dart';
 import 'package:apsensi_mobile/ui/widget/home/status_presensi_widget.dart';
 import 'package:apsensi_mobile/ui/widget/home/jadwal_hari_ini_widget.dart';
 import 'package:apsensi_mobile/core/models/user.dart';
@@ -155,4 +155,69 @@ class _HomePageState extends State<HomePage> {
       }),
     );
   }
+}
+
+Widget buildProfile(BuildContext context, User user) {
+  return Container(
+    margin: const EdgeInsets.only(
+      top: 40,
+    ),
+    child: Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'Hello,',
+              style: whiteTextStyle.copyWith(
+                fontSize: 19,
+                fontWeight: bold,
+              ),
+            ),
+            const SizedBox(
+              height: 2,
+            ),
+            Text(
+              user.fullname ?? 'Guest',
+              style: whiteTextStyle.copyWith(
+                fontSize: 19,
+                fontWeight: bold,
+              ),
+            ),
+            const SizedBox(
+              height: 2,
+            ),
+            Text(
+              user.nik ?? 'No NIK',
+              style: whiteTextStyle.copyWith(
+                fontSize: 10,
+                fontWeight: semibold,
+              ),
+            ),
+          ],
+        ),
+        GestureDetector(
+          onTap: () {
+            Navigator.push(context,
+                MaterialPageRoute(builder: (context) => ProfilePage()));
+          },
+          child: Container(
+            width: 40,
+            height: 40,
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              image: DecorationImage(
+                image: user.photos?.front != null
+                    ? NetworkImage(user.photos!.front!)
+                    : AssetImage('assets/home/profil_picture.png')
+                        as ImageProvider, // URL gambar dari API atau gambar default
+                fit: BoxFit.cover,
+              ),
+            ),
+          ),
+        ),
+      ],
+    ),
+  );
 }
