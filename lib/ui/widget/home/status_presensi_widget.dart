@@ -21,13 +21,13 @@ Widget buildCardStatusPresensi(BuildContext context) {
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Icon(
+              const Icon(
                 Icons.check_circle,
                 color: Colors.green,
                 size: 100,
               ),
               SizedBox(height: 16),
-              Text(
+              const Text(
                 'Presensi Berhasil',
                 style: TextStyle(
                   fontSize: 20,
@@ -40,7 +40,7 @@ Widget buildCardStatusPresensi(BuildContext context) {
                 textAlign: TextAlign.center,
               ),
               SizedBox(height: 16),
-              Text(
+              const Text(
                 'Selamat bekerja dan terima kasih telah melakukan presensi',
                 textAlign: TextAlign.center,
                 style: TextStyle(
