@@ -1,10 +1,32 @@
+import 'package:apsensi_mobile/core/models/jadwal/schedule.dart';
 import 'package:flutter/material.dart';
 import 'package:apsensi_mobile/shared/theme.dart';
 import 'package:intl/intl.dart';
 
-Widget buildCardStatusPresensi(BuildContext context) {
-  String currentDate =
-      DateFormat('EEEE, dd MMMM yyyy', 'id_ID').format(DateTime.now());
+Widget buildCardStatusPresensi(BuildContext context, List<Schedule> schedules) {
+  String currentDate = DateFormat('EEEE, dd MMMM yyyy', 'id_ID').format(DateTime.now());
+
+  Schedule? currentSchedule;
+  DateTime now = DateTime.now();
+  
+  for (var schedule in schedules) {
+    final startTime = TimeOfDay(
+      hour: int.parse(schedule.timeStart.split(':')[0]),
+      minute: int.parse(schedule.timeStart.split(':')[1]),
+    );
+    final endTime = TimeOfDay(
+      hour: int.parse(schedule.timeEnd.split(':')[0]),
+      minute: int.parse(schedule.timeEnd.split(':')[1]),
+    );
+
+    final startDateTime = DateTime(now.year, now.month, now.day, startTime.hour, startTime.minute);
+    final endDateTime = DateTime(now.year, now.month, now.day, endTime.hour, endTime.minute);
+
+    if (now.isAfter(startDateTime) && now.isBefore(endDateTime)) {
+      currentSchedule = schedule;
+      break;
+    }
+  }
 
   return Container(
     width: double.infinity,
@@ -20,6 +42,7 @@ Widget buildCardStatusPresensi(BuildContext context) {
       color: Colors.white,
     ),
     child: Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -43,42 +66,64 @@ Widget buildCardStatusPresensi(BuildContext context) {
         const SizedBox(
           height: 7,
         ),
-        Text(
-          '09.30-11.00',
-          style: blackTextStyle.copyWith(
-            fontSize: 19,
-            fontWeight: bold,
-          ),
-        ),
-        const SizedBox(
-          height: 7,
-        ),
-        Text(
-          'Kimia',
-          style: blackTextStyle.copyWith(
-            fontSize: 13,
-            fontWeight: bold,
-          ),
-        ),
-        Spacer(),
-        SizedBox(
-          width: double.infinity,
-          height: 30,
-          child: ElevatedButton(
-            onPressed: () {},
-            style: ElevatedButton.styleFrom(
-              backgroundColor: const Color(0xff0099FF),
-            ),
-            child: Text(
-              'Check In',
-              style: TextStyle(
-                fontSize: 10,
-                fontWeight: bold,
-                color: Colors.white,
+        if (currentSchedule != null)
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Text(
+                '${currentSchedule.formattedTimeStart}-${currentSchedule.formattedTimeEnd}',
+                style: blackTextStyle.copyWith(
+                  fontSize: 19,
+                  fontWeight: bold,
+                ),
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(
+                height: 7,
+              ),
+              Text(
+                currentSchedule.course,
+                style: blackTextStyle.copyWith(
+                  fontSize: 13,
+                  fontWeight: bold,
+                ),
+                textAlign: TextAlign.center,
+              ),
+              SizedBox(
+                height: 25,
+              ),
+              SizedBox(
+                height: 30,
+                child: ElevatedButton(
+                  onPressed: () {},
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: const Color(0xff0099FF),
+                  ),
+                  child: Text(
+                    'Check In',
+                    style: TextStyle(
+                      fontSize: 10,
+                      fontWeight: bold,
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          )
+        else
+          Expanded(
+            child: Center(
+              child: Text(
+                'Tidak ada presensi untuk saat ini',
+                style: blackTextStyle.copyWith(
+                  fontSize: 13,
+                  fontWeight: bold,
+                ),
+                textAlign: TextAlign.center,
               ),
             ),
           ),
-        ),
       ],
     ),
   );

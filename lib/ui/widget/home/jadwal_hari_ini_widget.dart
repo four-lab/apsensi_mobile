@@ -1,7 +1,8 @@
-import 'package:flutter/material.dart';
+import 'package:apsensi_mobile/core/models/jadwal/schedule.dart';
+import 'package:flutter/material.dart'; 
 import 'package:apsensi_mobile/shared/theme.dart';
 
-Widget buildCardJadwalHariIni() {
+Widget buildCardJadwalHariIni(List<Schedule> schedules) {
   return Container(
     width: double.infinity,
     margin: const EdgeInsets.only(
@@ -26,70 +27,53 @@ Widget buildCardJadwalHariIni() {
         const SizedBox(
           height: 7,
         ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            Expanded(
-              child: Text(
-                'Kimia',
-                style: blackTextStyle.copyWith(
-                  fontSize: 10,
-                  fontWeight: bold,
-                ),
+        if (schedules.isNotEmpty)
+          Column(
+            children: schedules.map((schedule) {
+              return Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Expanded(
+                    child: Text(
+                      schedule.course,
+                      style: blackTextStyle.copyWith(
+                        fontSize: 10,
+                        fontWeight: bold,
+                      ),
+                    ),
+                  ),
+                  Expanded(
+                    child: Text(
+                      schedule.classroom,
+                      style: blackTextStyle.copyWith(
+                        fontSize: 10,
+                        fontWeight: bold,
+                      ),
+                    ),
+                  ),
+                  Expanded(
+                    child: Text(
+                      '${schedule.formattedTimeStart} - ${schedule.formattedTimeEnd} WIB',
+                      style: blackTextStyle.copyWith(
+                        fontSize: 10,
+                        fontWeight: bold,
+                      ),
+                    ),
+                  ),
+                ],
+              );
+            }).toList(),
+          )
+        else
+          Center(
+            child: Text(
+              'Tidak ada jadwal untuk hari ini',
+              style: blackTextStyle.copyWith(
+                fontSize: 13,
+                fontWeight: bold,
               ),
             ),
-            Expanded(
-              child: Text(
-                'XII BD-2',
-                style: blackTextStyle.copyWith(
-                  fontSize: 10,
-                  fontWeight: bold,
-                ),
-              ),
-            ),
-            Expanded(
-              child: Text(
-                '09.30-11.00 WIB',
-                style: blackTextStyle.copyWith(
-                  fontSize: 10,
-                  fontWeight: bold,
-                ),
-              ),
-            ),
-          ],
-        ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            Expanded(
-              child: Text(
-                'Bimbingan Karir',
-                style: blackTextStyle.copyWith(
-                  fontSize: 10,
-                  fontWeight: bold,
-                ),
-              ),
-            ),
-            Expanded(
-              child: Text(
-                'X AKL-2',
-                style: blackTextStyle.copyWith(
-                  fontSize: 10,
-                  fontWeight: bold,
-                ),
-              ),
-            ),
-            Expanded(
-              child: Text(
-                '12:30 - 14:00 WIB',
-                style: blackTextStyle.copyWith(
-                  fontSize: 10,
-                  fontWeight: bold,
-                ),
-              ),
-            ),
-          ],
-        ),
+          ),
       ],
     ),
   );
