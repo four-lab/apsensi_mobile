@@ -1,10 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:apsensi_mobile/shared/theme.dart';
 import 'package:intl/intl.dart';
-import 'package:m7_livelyness_detection/index.dart';
+import 'package:apsensi_mobile/core/models/jadwal/schedule.dart';
 import 'package:apsensi_mobile/core/controllers/checkin_controller.dart';
+import 'package:m7_livelyness_detection/index.dart';
 
 class PresensiWidget extends StatefulWidget {
+  final List<Schedule> schedules;
+  final bool hasSchedule; // New parameter to indicate if there are schedules available
+
+  const PresensiWidget({Key? key, required this.schedules, required this.hasSchedule}) : super(key: key);
+
   @override
   _PresensiWidgetState createState() => _PresensiWidgetState();
 }
@@ -129,7 +135,7 @@ class _PresensiWidgetState extends State<PresensiWidget> {
       bool isLocationValid = await _checkInController.checkIn(context);
 
       if (isLocationValid) {
-        // Jika validasi lokasi berhasil, lanjutkan dengan deteksi kehadiran
+                // Jika validasi lokasi berhasil, lanjutkan dengan deteksi kehadiran
         final M7CapturedImage? detectionResponse =
             await M7LivelynessDetection.instance.detectLivelyness(context,
                 config: M7DetectionConfig(steps: [
@@ -139,6 +145,7 @@ class _PresensiWidgetState extends State<PresensiWidget> {
         if (detectionResponse != null) {
           showSuccessDialog();
         }
+        showSuccessDialog();
       } else {
         showErrorDialog("Lokasi tidak valid.");
       }
@@ -155,6 +162,28 @@ class _PresensiWidgetState extends State<PresensiWidget> {
   Widget build(BuildContext context) {
     String currentDate =
         DateFormat('EEEE, dd MMMM yyyy', 'id_ID').format(DateTime.now());
+
+    Schedule? currentSchedule;
+    DateTime now = DateTime.now();
+  
+    for (var schedule in widget.schedules) {
+      final startTime = TimeOfDay(
+        hour: int.parse(schedule.timeStart.split(':')[0]),
+        minute: int.parse(schedule.timeStart.split(':')[1]),
+      );
+      final endTime = TimeOfDay(
+        hour: int.parse(schedule.timeEnd.split(':')[0]),
+        minute: int.parse(schedule.timeEnd.split(':')[1]),
+      );
+
+      final startDateTime = DateTime(now.year, now.month, now.day, startTime.hour, startTime.minute);
+      final endDateTime = DateTime(now.year, now.month, now.day, endTime.hour, endTime.minute);
+
+      if (now.isAfter(startDateTime) && now.isBefore(endDateTime)) {
+        currentSchedule = schedule;
+        break;
+      }
+    }
 
     return Container(
       width: double.infinity,
@@ -193,44 +222,59 @@ class _PresensiWidgetState extends State<PresensiWidget> {
           const SizedBox(
             height: 7,
           ),
-          Text(
-            '09.30-11.00',
+          if (currentSchedule != null) ...[
+            Text(
+              '${currentSchedule.formattedTimeStart}-${currentSchedule.formattedTimeEnd}',
             style: blackTextStyle.copyWith(
               fontSize: 19,
               fontWeight: bold,
             ),
-          ),
-          const SizedBox(
-            height: 7,
-          ),
-          Text(
-            'Kimia',
+            ),
+            const SizedBox(
+              height: 7,
+            ),
+            Text(
+              currentSchedule.course,
             style: blackTextStyle.copyWith(
               fontSize: 13,
               fontWeight: bold,
             ),
-          ),
-          Spacer(),
-          SizedBox(
-            width: double.infinity,
-            height: 30,
-            child: ElevatedButton(
-              onPressed: _isLoading ? null : _startPresence,
-              style: ElevatedButton.styleFrom(
-                backgroundColor: const Color(0xff0099FF),
-              ),
-              child: _isLoading
-                  ? const CircularProgressIndicator(color: Colors.white)
-                  : Text(
-                      'Check In',
-                      style: TextStyle(
-                        fontSize: 10,
-                        fontWeight: bold,
-                        color: Colors.white,
-                      ),
-                    ),
             ),
-          ),
+            Spacer(),
+            SizedBox(
+              width: double.infinity,
+              height: 30,
+              child: ElevatedButton(
+                onPressed: _isLoading || !widget.hasSchedule ? null : _startPresence,
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: const Color(0xff0099FF),
+                ),
+                child: _isLoading
+                    ? const CircularProgressIndicator(color: Colors.white)
+                    : const Text(
+                  'Check In',
+                  style: TextStyle(
+                    fontSize: 10,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                  ),
+                ),
+              ),
+            ),
+          ] else ...[
+            Expanded(
+              child: Center(
+                child: Text(
+                  'Tidak ada presensi untuk saat ini',
+                  style: blackTextStyle.copyWith(
+                    fontSize: 13,
+                    fontWeight: bold,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+              ),
+            ),
+          ],
         ],
       ),
     );

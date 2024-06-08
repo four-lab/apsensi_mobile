@@ -1,9 +1,54 @@
+import 'package:apsensi_mobile/core/models/jadwal/schedule.dart';
 import 'package:flutter/material.dart';
 import 'package:apsensi_mobile/shared/theme.dart';
 import 'package:apsensi_mobile/ui/widget/presensi/presensi_widget.dart';
+import 'package:apsensi_mobile/core/services/schedule_service.dart';
+import 'package:apsensi_mobile/core/controllers/auth_controller.dart';
+import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 
-class PresensiPage extends StatelessWidget {
+class PresensiPage extends StatefulWidget {
   const PresensiPage({Key? key}) : super(key: key);
+
+  @override
+  _PresensiPageState createState() => _PresensiPageState();
+}
+
+class _PresensiPageState extends State<PresensiPage> {
+  final AuthController authController = Get.put(AuthController());
+  bool _isLoading = false;
+  bool _hasSchedule = true;
+  List<Schedule> _scheduleList = [];
+
+  @override
+  void initState() {
+    super.initState();
+    authController.loadUserFromPrefs(); // Load user data from SharedPreferences
+    _fetchSchedulesForToday(DateTime.now());
+  }
+
+  void _fetchSchedulesForToday(DateTime date) async {
+    setState(() {
+      _isLoading = true;
+      _hasSchedule = true;
+    });
+
+    try {
+      final schedules = await ScheduleService.fetchSchedulesForDate(
+          DateFormat('yyyy-MM-dd').format(date));
+      setState(() {
+        _scheduleList = schedules;
+        _hasSchedule = schedules.isNotEmpty;
+        _isLoading = false;
+      });
+    } catch (error) {
+      setState(() {
+        _isLoading = false;
+        _hasSchedule = false;
+      });
+      print('Error fetching schedules: $error');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -19,7 +64,7 @@ class PresensiPage extends StatelessWidget {
             fontWeight: FontWeight.bold,
           ),
         ),
-        centerTitle: true, // Tambahkan ini untuk membuat title berada di tengah
+        centerTitle: true,
         elevation: 0,
         leading: IconButton(
           icon: Icon(Icons.arrow_back),
@@ -31,7 +76,12 @@ class PresensiPage extends StatelessWidget {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            PresensiWidget(),
+            _isLoading
+                ? CircularProgressIndicator() // Show loading indicator while fetching schedules
+                : _hasSchedule
+                    ? PresensiWidget(
+                        schedules: _scheduleList, hasSchedule: _hasSchedule)
+                    : CircularProgressIndicator(), // Alternatively, you can show a different loading indicator here
             const SizedBox(height: 20),
             Container(
               margin: const EdgeInsets.symmetric(horizontal: 16),
@@ -47,7 +97,7 @@ class PresensiPage extends StatelessWidget {
                     'Log Presensi',
                     style: blackTextStyle.copyWith(
                       fontSize: 16,
-                      fontWeight: bold,
+                      fontWeight: FontWeight.bold,
                     ),
                   ),
                   const SizedBox(height: 10),
