@@ -31,7 +31,7 @@ class PresensiPage extends StatelessWidget {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            buildPresensi(context),
+            PresensiWidget(),
             const SizedBox(height: 20),
             Container(
               margin: const EdgeInsets.symmetric(horizontal: 16),

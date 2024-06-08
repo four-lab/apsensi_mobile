@@ -24,4 +24,8 @@ class urlApi {
   static String getHolidays() {
     return baseUrl + '/holidays';
   }
+
+  static String sendLocation() {
+    return baseUrl + '/attendances/valid-area';
+  }
 }
