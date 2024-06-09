@@ -2,6 +2,7 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:apsensi_mobile/shared/theme.dart';
 import 'package:intl/intl.dart';
+import 'package:flutter_pdfview/flutter_pdfview.dart';
 
 class PengajuanIzinPage extends StatefulWidget {
   const PengajuanIzinPage({Key? key}) : super(key: key);
@@ -15,6 +16,7 @@ class _PengajuanIzinPageState extends State<PengajuanIzinPage> {
   TextEditingController descriptionController = TextEditingController();
   TextEditingController dateController = TextEditingController();
   TextEditingController daysController = TextEditingController();
+  String? pdfPath;
 
   @override
   Widget build(BuildContext context) {
@@ -130,7 +132,8 @@ class _PengajuanIzinPageState extends State<PengajuanIzinPage> {
                       decoration: InputDecoration(
                         hintText: "Pilih Tanggal",
                         border: OutlineInputBorder(
-                            borderRadius: BorderRadius.all(Radius.circular(20))),
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(20))),
                         contentPadding: EdgeInsets.all(10),
                       ),
                       onTap: () async {
@@ -142,7 +145,8 @@ class _PengajuanIzinPageState extends State<PengajuanIzinPage> {
                         );
 
                         if (pickedDate != null) {
-                          String formattedDate = DateFormat('yyyy-MM-dd').format(pickedDate);
+                          String formattedDate =
+                              DateFormat('yyyy-MM-dd').format(pickedDate);
                           setState(() {
                             dateController.text = formattedDate;
                           });
@@ -165,7 +169,8 @@ class _PengajuanIzinPageState extends State<PengajuanIzinPage> {
                       decoration: InputDecoration(
                         hintText: "Jumlah Hari",
                         border: OutlineInputBorder(
-                            borderRadius: BorderRadius.all(Radius.circular(20))),
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(20))),
                         contentPadding: EdgeInsets.all(10),
                       ),
                       keyboardType: TextInputType.number,
@@ -183,18 +188,15 @@ class _PengajuanIzinPageState extends State<PengajuanIzinPage> {
             height: 300,
             child: TextButton(
               onPressed: () async {
-                FilePickerResult? result = await FilePicker.platform.pickFiles();
+                FilePickerResult? result = await FilePicker.platform.pickFiles(
+                  type: FileType.custom,
+                  allowedExtensions: ['pdf'],
+                );
 
                 if (result != null) {
-                  PlatformFile file = result.files.first;
-
-                  print('Path: ${file.path}');
-                  print('Byte Count: ${file.bytes}');
-                  print('Name: ${file.name}');
-                  print('Extension: ${file.extension}');
-                  print('Size: ${file.size}');
-                } else {
-                  // User canceled the picker
+                  setState(() {
+                    pdfPath = result.files.single.path;
+                  });
                 }
               },
               style: TextButton.styleFrom(
@@ -205,23 +207,44 @@ class _PengajuanIzinPageState extends State<PengajuanIzinPage> {
                   side: BorderSide(color: Colors.black, width: 0.4),
                 ),
               ),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Image.asset(
-                    'assets/perizinan/pdfIcon.png',
-                    width: 48,
-                  ),
-                  SizedBox(width: 8),
-                  Text(
-                    'Hanya file dengan format PDF',
-                    style: TextStyle(
-                      fontSize: 16,
-                      color: Colors.grey,
+              child: pdfPath == null
+                  ? Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Image.asset(
+                          'assets/perizinan/pdfIcon.png',
+                          width: 48,
+                        ),
+                        SizedBox(height: 8),
+                        Text(
+                          'Hanya file dengan format PDF',
+                          style: TextStyle(
+                            fontSize: 16,
+                            color: Colors.grey,
+                          ),
+                        ),
+                      ],
+                    )
+                  : PDFView(
+                      filePath: pdfPath,
+                      fitPolicy: FitPolicy.BOTH,
+                      enableSwipe: true,
+                      swipeHorizontal: true,
+                      autoSpacing: false,
+                      pageFling: false,
+                      pageSnap: true,
+                      defaultPage: 0,
+                      onRender: (_pages) {
+                        setState(() {});
+                      },
+                      onError: (error) {
+                        print(error.toString());
+                      },
+                      onPageError: (page, error) {
+                        print('$page: ${error.toString()}');
+                      },
+                      onViewCreated: (PDFViewController pdfViewController) {},
                     ),
-                  ),
-                ],
-              ),
             ),
           ),
           SizedBox(height: 8),
