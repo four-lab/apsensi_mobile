@@ -40,7 +40,8 @@ class _JadwalPageState extends State<JadwalPage> {
     });
 
     try {
-      final schedules = await ScheduleService.fetchSchedulesForDate(DateFormat('yyyy-MM-dd').format(date));
+      final schedules = await ScheduleService.fetchSchedulesForDate(
+          DateFormat('yyyy-MM-dd').format(date));
       setState(() {
         _scheduleList = schedules;
         _hasSchedule = schedules.isNotEmpty;
@@ -65,128 +66,129 @@ class _JadwalPageState extends State<JadwalPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: transparentBackground,
-        bottomNavigationBar: BottomAppBar(
-          color: whiteColor,
-          shape: const CircularNotchedRectangle(),
-          clipBehavior: Clip.antiAlias,
-          notchMargin: 6,
+      backgroundColor: transparentBackground,
+      bottomNavigationBar: BottomAppBar(
+        color: whiteColor,
+        shape: const CircularNotchedRectangle(),
+        clipBehavior: Clip.antiAlias,
+        notchMargin: 6,
+        elevation: 0,
+        child: BottomNavigationBar(
+          type: BottomNavigationBarType.fixed,
+          backgroundColor: whiteColor,
           elevation: 0,
-          child: BottomNavigationBar(
-            type: BottomNavigationBarType.fixed,
-            backgroundColor: whiteColor,
-            elevation: 0,
-            selectedItemColor: buttonActiveColor,
-            unselectedItemColor: buttonDisableColor,
-            showSelectedLabels: true,
-            showUnselectedLabels: true,
-            selectedLabelStyle: blueTextStyle.copyWith(
-              fontSize: 12,
-              fontWeight: medium,
-            ),
-            unselectedLabelStyle: blackTextStyle.copyWith(
-              fontSize: 12,
-              fontWeight: medium,
-            ),
-            currentIndex: 1, // Menandakan item terpilih, dalam hal ini indeks 1 untuk "Jadwal"
-            onTap: (index) {
-              if (index == 0) {
-                // Jika item "Home" diklik, kembali ke halaman Home tanpa animasi
-                Navigator.pushReplacement(
-                  context,
-                  PageRouteBuilder(
-                    pageBuilder: (_, __, ___) => HomePage(),
-                    transitionsBuilder: (_, __, ___, child) => child,
-                  ),
-                );
-              } else if (index == 2) {
-                // Jika item "Jadwal" diklik, pindah ke halaman Jadwal tanpa animasi
-                Navigator.pushReplacement(
-                  context,
-                  PageRouteBuilder(
-                    pageBuilder: (_, __, ___) => CalendarPage(),
-                    transitionsBuilder: (_, __, ___, child) => child,
-                  ),
-                );
-              } else if (index == 3) {
-                // Jika item "Perizinan" diklik, pindah ke halaman Perizinan tanpa animasi
-                Navigator.pushReplacement(
-                  context,
-                  PageRouteBuilder(
-                    pageBuilder: (_, __, ___) => PerizinanPage(),
-                    transitionsBuilder: (_, __, ___, child) => child,
-                  ),
-                );
-              }
-            },
-            items: [
-              BottomNavigationBarItem(
-                icon: Image.asset(
-                  'assets/navbar/home.png',
-                  width: 24,
-                  color:
-                      buttonDisableColor, // Karena bukan halaman utama, warna dinonaktifkan
-                ),
-                label: 'Home',
-              ),
-              BottomNavigationBarItem(
-                icon: Image.asset(
-                  'assets/navbar/jadwal.png',
-                  width: 24,
-                  color:
-                      buttonActiveColor, // Item "Jadwal" dipilih, sehingga warnanya aktif
-                ),
-                label: 'Jadwal',
-              ),
-              BottomNavigationBarItem(
-                icon: Image.asset(
-                  'assets/navbar/kalender.png',
-                  width: 24,
-                  color:
-                      buttonDisableColor, // Karena bukan halaman utama, warna dinonaktifkan
-                ),
-                label: 'Kalendar',
-              ),
-              BottomNavigationBarItem(
-                icon: Image.asset(
-                  'assets/navbar/perizinan.png',
-                  width: 24,
-                  color:
-                      buttonDisableColor, // Karena bukan halaman utama, warna dinonaktifkan
-                ),
-                label: 'Perizinan',
-              ),
-            ],
+          selectedItemColor: buttonActiveColor,
+          unselectedItemColor: buttonDisableColor,
+          showSelectedLabels: true,
+          showUnselectedLabels: true,
+          selectedLabelStyle: blueTextStyle.copyWith(
+            fontSize: 12,
+            fontWeight: medium,
           ),
-        ),
-        floatingActionButton: FloatingActionButton(
-          onPressed: () {
-            // Ketika tombol floating button diklik, pindah ke halaman PresensiPage
-            Navigator.push(
-              context,
-              PageRouteBuilder(
-                pageBuilder: (_, __, ___) => PresensiPage(),
-                transitionsBuilder: (_, __, ___, child) => child,
-              ),
-            );
+          unselectedLabelStyle: blackTextStyle.copyWith(
+            fontSize: 12,
+            fontWeight: medium,
+          ),
+          currentIndex:
+              1, // Menandakan item terpilih, dalam hal ini indeks 1 untuk "Jadwal"
+          onTap: (index) {
+            if (index == 0) {
+              // Jika item "Home" diklik, kembali ke halaman Home tanpa animasi
+              Navigator.pushReplacement(
+                context,
+                PageRouteBuilder(
+                  pageBuilder: (_, __, ___) => HomePage(),
+                  transitionsBuilder: (_, __, ___, child) => child,
+                ),
+              );
+            } else if (index == 2) {
+              // Jika item "Jadwal" diklik, pindah ke halaman Jadwal tanpa animasi
+              Navigator.pushReplacement(
+                context,
+                PageRouteBuilder(
+                  pageBuilder: (_, __, ___) => CalendarPage(),
+                  transitionsBuilder: (_, __, ___, child) => child,
+                ),
+              );
+            } else if (index == 3) {
+              // Jika item "Perizinan" diklik, pindah ke halaman Perizinan tanpa animasi
+              Navigator.pushReplacement(
+                context,
+                PageRouteBuilder(
+                  pageBuilder: (_, __, ___) => PerizinanPage(),
+                  transitionsBuilder: (_, __, ___, child) => child,
+                ),
+              );
+            }
           },
-          backgroundColor: buttonActiveColor,
-          shape: const CircleBorder(),
-          child: Image.asset(
-            'assets/navbar/presensi.png',
-            width: 24,
-          ),
+          items: [
+            BottomNavigationBarItem(
+              icon: Image.asset(
+                'assets/navbar/home.png',
+                width: 24,
+                color:
+                    buttonDisableColor, // Karena bukan halaman utama, warna dinonaktifkan
+              ),
+              label: 'Home',
+            ),
+            BottomNavigationBarItem(
+              icon: Image.asset(
+                'assets/navbar/jadwal.png',
+                width: 24,
+                color:
+                    buttonActiveColor, // Item "Jadwal" dipilih, sehingga warnanya aktif
+              ),
+              label: 'Jadwal',
+            ),
+            BottomNavigationBarItem(
+              icon: Image.asset(
+                'assets/navbar/kalender.png',
+                width: 24,
+                color:
+                    buttonDisableColor, // Karena bukan halaman utama, warna dinonaktifkan
+              ),
+              label: 'Kalendar',
+            ),
+            BottomNavigationBarItem(
+              icon: Image.asset(
+                'assets/navbar/perizinan.png',
+                width: 24,
+                color:
+                    buttonDisableColor, // Karena bukan halaman utama, warna dinonaktifkan
+              ),
+              label: 'Perizinan',
+            ),
+          ],
         ),
-        floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-        body: ListView(
-          padding: const EdgeInsetsDirectional.symmetric(horizontal: 34),
-          children: [
-            titlePage(),
-            date(),
-            datePicker(_onDateSelected),
-            scheduleTitle(),
-            _isLoading
-            ? Center(
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          // Ketika tombol floating button diklik, pindah ke halaman PresensiPage
+          Navigator.push(
+            context,
+            PageRouteBuilder(
+              pageBuilder: (_, __, ___) => PresensiPage(),
+              transitionsBuilder: (_, __, ___, child) => child,
+            ),
+          );
+        },
+        backgroundColor: buttonActiveColor,
+        shape: const CircleBorder(),
+        child: Image.asset(
+          'assets/navbar/presensi.png',
+          width: 24,
+        ),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+      body: ListView(
+        padding: const EdgeInsetsDirectional.symmetric(horizontal: 16),
+        children: [
+          titlePage(),
+          date(),
+          datePicker(_onDateSelected),
+          scheduleTitle(),
+          _isLoading
+              ? Center(
                   child: Container(
                     height: 100,
                     decoration: BoxDecoration(
@@ -244,23 +246,21 @@ Widget datePicker(void Function(DateTime) onDateSelected) {
     child: Container(
       height: 85,
       width: 60,
-      child: DatePicker(
-        DateTime.now(),
-        initialSelectedDate: DateTime.now(),
-        selectionColor: Color(0xFF0099FF),
-        selectedTextColor: Colors.white,
-        daysCount: 30,
-        deactivatedColor: Colors.grey,
-        dateTextStyle: GoogleFonts.poppins(
-            fontSize: 16, fontWeight: FontWeight.w600, color: Colors.black),
-        dayTextStyle: GoogleFonts.poppins(
-            fontSize: Dimen.dayTextSize, color: Colors.grey),
-        monthTextStyle: GoogleFonts.poppins(
-            fontSize: Dimen.monthTextSize, color: Colors.grey),
-        onDateChange: (date) {
-          onDateSelected(date);
-        }
-      ),
+      child: DatePicker(DateTime.now(),
+          initialSelectedDate: DateTime.now(),
+          selectionColor: Color(0xFF0099FF),
+          selectedTextColor: Colors.white,
+          daysCount: 30,
+          deactivatedColor: Colors.grey,
+          dateTextStyle: GoogleFonts.poppins(
+              fontSize: 16, fontWeight: FontWeight.w600, color: Colors.black),
+          dayTextStyle: GoogleFonts.poppins(
+              fontSize: Dimen.dayTextSize, color: Colors.grey),
+          monthTextStyle: GoogleFonts.poppins(
+              fontSize: Dimen.monthTextSize,
+              color: Colors.grey), onDateChange: (date) {
+        onDateSelected(date);
+      }),
     ),
   );
 }

@@ -1,5 +1,5 @@
 import 'package:apsensi_mobile/core/models/jadwal/schedule.dart';
-import 'package:apsensi_mobile/ui/pages/profile_page.dart'; 
+import 'package:apsensi_mobile/ui/pages/profile_page.dart';
 import 'package:flutter/material.dart';
 import 'package:apsensi_mobile/shared/theme.dart';
 import 'package:flutter/widgets.dart';
@@ -27,7 +27,7 @@ class _HomePageState extends State<HomePage> {
   final AuthController authController = Get.put(AuthController());
   bool _isLoading = false;
   bool _hasSchedule = true;
-  List<Schedule> _scheduleList  = [];
+  List<Schedule> _scheduleList = [];
 
   @override
   void initState() {
@@ -43,7 +43,8 @@ class _HomePageState extends State<HomePage> {
     });
 
     try {
-      final schedules = await ScheduleService.fetchSchedulesForDate(DateFormat('yyyy-MM-dd').format(date));
+      final schedules = await ScheduleService.fetchSchedulesForDate(
+          DateFormat('yyyy-MM-dd').format(date));
       setState(() {
         _scheduleList = schedules;
         _hasSchedule = schedules.isNotEmpty;
@@ -57,7 +58,6 @@ class _HomePageState extends State<HomePage> {
       print('Error fetching schedules: $error');
     }
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -174,106 +174,104 @@ class _HomePageState extends State<HomePage> {
         final user = authController.user.value;
         return ListView(
           padding: const EdgeInsetsDirectional.symmetric(
-            horizontal: 34,
+            horizontal: 16,
           ),
           children: [
             buildProfile(context, user),
             _isLoading
-            ? Center(
-                  child: Container(
-                    height: 160,
-                    margin: const EdgeInsets.only(
-                    top: 26,
-                    left: 16,
-                    right: 16,
-                    ),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    child: Center(
-                      child: CircularProgressIndicator(),
-                    ),
-                  ),
-                )
-              : _hasSchedule
-                  ? buildCardStatusPresensi(context, _scheduleList)
-                  : Center(
-                      child: Container(
-                        height: 160,
-                        margin: const EdgeInsets.only(
+                ? Center(
+                    child: Container(
+                      height: 160,
+                      margin: const EdgeInsets.only(
                         top: 26,
                         left: 16,
                         right: 16,
                       ),
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        child: Center(
-                          child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Icon(Icons.error, color: Colors.grey),
-                            const SizedBox(height: 8),
-                            Text(
-                              'Tidak ada presensi untuk saat ini',
-                              style: blackTextStyle.copyWith(
-                                fontSize: 13,
-                                fontWeight: bold,
-                              ),
-                            ),
-                          ],
-                        ),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: Center(
+                        child: CircularProgressIndicator(),
                       ),
                     ),
-                  ),
+                  )
+                : _hasSchedule
+                    ? buildCardStatusPresensi(context, _scheduleList)
+                    : Center(
+                        child: Container(
+                          height: 160,
+                          margin: const EdgeInsets.only(
+                            top: 26,
+                          ),
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          child: Center(
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Icon(Icons.error, color: Colors.grey),
+                                const SizedBox(height: 8),
+                                Text(
+                                  'Tidak ada presensi untuk saat ini',
+                                  style: blackTextStyle.copyWith(
+                                    fontSize: 13,
+                                    fontWeight: bold,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
             _isLoading
-            ? Center(
-                  child: Container(
-                    height: 60,
-                    margin: const EdgeInsets.only(
-                    top: 26,
-                    ),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    child: Center(
-                      child: CircularProgressIndicator(),
-                    ),
-                  ),
-                )
-              : _hasSchedule
-                  ? buildCardJadwalHariIni(_scheduleList)
-                  : Center(
-                      child: Container(
-                        height: 60,
-                        margin: const EdgeInsets.only(
+                ? Center(
+                    child: Container(
+                      height: 60,
+                      margin: const EdgeInsets.only(
                         top: 26,
-                        ),
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        child: Center(
-                          child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Icon(Icons.error, color: Colors.grey),
-                            const SizedBox(width: 8),
-                            Text(
-                              'Tidak ada jadwal untuk hari ini',
-                              style: blackTextStyle.copyWith(
-                                fontSize: 13,
-                                fontWeight: bold,
-                              ),
-                            ),
-                          ],
-                        ),
+                      ),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: Center(
+                        child: CircularProgressIndicator(),
                       ),
                     ),
-                  ),
+                  )
+                : _hasSchedule
+                    ? buildCardJadwalHariIni(_scheduleList)
+                    : Center(
+                        child: Container(
+                          height: 60,
+                          margin: const EdgeInsets.only(
+                            top: 26,
+                          ),
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          child: Center(
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Icon(Icons.error, color: Colors.grey),
+                                const SizedBox(width: 8),
+                                Text(
+                                  'Tidak ada jadwal untuk hari ini',
+                                  style: blackTextStyle.copyWith(
+                                    fontSize: 13,
+                                    fontWeight: bold,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
           ],
         );
       }),

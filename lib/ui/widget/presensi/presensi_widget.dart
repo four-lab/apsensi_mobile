@@ -4,17 +4,18 @@ import 'package:intl/intl.dart';
 import 'package:apsensi_mobile/core/models/jadwal/schedule.dart';
 import 'package:apsensi_mobile/core/controllers/checkin_controller.dart';
 import 'package:m7_livelyness_detection/index.dart';
+import 'package:apsensi_mobile/core/services/get_status_service.dart';
 
 class PresensiWidget extends StatefulWidget {
   final List<Schedule> schedules;
   final bool hasSchedule;
-  final bool isLoading; // Add isLoading parameter
+  final bool isLoading;
 
   const PresensiWidget({
     Key? key,
     required this.schedules,
     required this.hasSchedule,
-    required this.isLoading, // Add isLoading parameter
+    required this.isLoading,
   }) : super(key: key);
 
   @override
@@ -143,7 +144,10 @@ class _PresensiWidgetState extends State<PresensiWidget> {
         final M7CapturedImage? detectionResponse =
             await M7LivelynessDetection.instance.detectLivelyness(context,
                 config: M7DetectionConfig(steps: [
-                  M7LivelynessStepItem(step: M7LivelynessStep.blink, title: "Kedipkan Mata", isCompleted: false)
+                  M7LivelynessStepItem(
+                      step: M7LivelynessStep.blink,
+                      title: "Kedipkan Mata",
+                      isCompleted: false)
                 ]));
 
         if (detectionResponse != null) {
@@ -170,7 +174,7 @@ class _PresensiWidgetState extends State<PresensiWidget> {
 
     Schedule? currentSchedule;
     DateTime now = DateTime.now();
-  
+
     for (var schedule in widget.schedules) {
       final startTime = TimeOfDay(
         hour: int.parse(schedule.timeStart.split(':')[0]),
@@ -181,8 +185,10 @@ class _PresensiWidgetState extends State<PresensiWidget> {
         minute: int.parse(schedule.timeEnd.split(':')[1]),
       );
 
-      final startDateTime = DateTime(now.year, now.month, now.day, startTime.hour, startTime.minute);
-      final endDateTime = DateTime(now.year, now.month, now.day, endTime.hour, endTime.minute);
+      final startDateTime = DateTime(
+          now.year, now.month, now.day, startTime.hour, startTime.minute);
+      final endDateTime =
+          DateTime(now.year, now.month, now.day, endTime.hour, endTime.minute);
 
       if (now.isAfter(startDateTime) && now.isBefore(endDateTime)) {
         currentSchedule = schedule;
@@ -206,6 +212,7 @@ class _PresensiWidgetState extends State<PresensiWidget> {
               color: Colors.white,
             ),
             child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -229,48 +236,89 @@ class _PresensiWidgetState extends State<PresensiWidget> {
                 const SizedBox(
                   height: 7,
                 ),
-                if (currentSchedule != null) ...[
-                  Text(
-                    '${currentSchedule.formattedTimeStart}-${currentSchedule.formattedTimeEnd}',
-                    style: blackTextStyle.copyWith(
-                      fontSize: 19,
-                      fontWeight: bold,
-                    ),
-                  ),
-                  const SizedBox(
-                    height: 7,
-                  ),
-                  Text(
-                    currentSchedule.course,
-                    style: blackTextStyle.copyWith(
-                      fontSize: 13,
-                      fontWeight: bold,
-                    ),
-                  ),
-                  Spacer(),
-                  SizedBox(
-                    width: double.infinity,
-                    height: 30,
-                    child: ElevatedButton(
-                      onPressed: _isLoading || !widget.hasSchedule
-                          ? null
-                          : _startPresence,
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color(0xff0099FF),
+                if (currentSchedule != null)
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      Text(
+                        '${currentSchedule.formattedTimeStart}-${currentSchedule.formattedTimeEnd}',
+                        style: blackTextStyle.copyWith(
+                          fontSize: 19,
+                          fontWeight: bold,
+                        ),
+                        textAlign: TextAlign.center,
                       ),
-                      child: _isLoading
-                          ? const CircularProgressIndicator(color: Colors.white)
-                          : const Text(
-                              'Check In',
-                              style: TextStyle(
-                                fontSize: 10,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.white,
-                              ),
-                            ),
-                    ),
-                  ),
-                ] else ...[
+                      const SizedBox(
+                        height: 7,
+                      ),
+                      Text(
+                        currentSchedule.course,
+                        style: blackTextStyle.copyWith(
+                          fontSize: 13,
+                          fontWeight: bold,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                      const SizedBox(
+                        height: 25,
+                      ),
+                      SizedBox(
+                        height: 30,
+                        child: FutureBuilder<Map<String, dynamic>>(
+                          future: GetStatusService().getStatus(),
+                          builder: (context, snapshot) {
+                            if (snapshot.connectionState ==
+                                ConnectionState.waiting) {
+                              return Center(
+                                child: CircularProgressIndicator(
+                                  valueColor: AlwaysStoppedAnimation<Color>(
+                                      Colors.white),
+                                ),
+                              );
+                            } else if (snapshot.hasError) {
+                              return ElevatedButton(
+                                onPressed: null,
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: const Color(0xff0099FF),
+                                ),
+                                child: Text(
+                                  'Error',
+                                  style: TextStyle(
+                                    fontSize: 10,
+                                    fontWeight: bold,
+                                    color: Colors.white,
+                                  ),
+                                ),
+                              );
+                            } else {
+                              final isActive =
+                                  snapshot.data?['isActive'] ?? false;
+                              return ElevatedButton(
+                                onPressed: _isLoading ? null : _startPresence,
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: const Color(0xff0099FF),
+                                ),
+                                child: _isLoading
+                                    ? const CircularProgressIndicator(
+                                        color: Colors.white)
+                                    : Text(
+                                        isActive
+                                            ? 'Akhiri Presensi'
+                                            : 'Mulai Presensi',
+                                        style: TextStyle(
+                                          fontSize: 10,
+                                          fontWeight: bold,
+                                          color: Colors.white,
+                                        ),
+                                      ),
+                              );
+                            }
+                          },
+                        ),
+                      ),
+                    ],
+                  )
+                else
                   Expanded(
                     child: Center(
                       child: Text(
@@ -283,7 +331,6 @@ class _PresensiWidgetState extends State<PresensiWidget> {
                       ),
                     ),
                   ),
-                ],
               ],
             ),
           );

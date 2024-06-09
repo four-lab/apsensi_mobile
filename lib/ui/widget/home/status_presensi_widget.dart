@@ -2,13 +2,15 @@ import 'package:apsensi_mobile/core/models/jadwal/schedule.dart';
 import 'package:flutter/material.dart';
 import 'package:apsensi_mobile/shared/theme.dart';
 import 'package:intl/intl.dart';
+import 'package:apsensi_mobile/core/services/get_status_service.dart';
 
 Widget buildCardStatusPresensi(BuildContext context, List<Schedule> schedules) {
-  String currentDate = DateFormat('EEEE, dd MMMM yyyy', 'id_ID').format(DateTime.now());
+  String currentDate =
+      DateFormat('EEEE, dd MMMM yyyy', 'id_ID').format(DateTime.now());
 
   Schedule? currentSchedule;
   DateTime now = DateTime.now();
-  
+
   for (var schedule in schedules) {
     final startTime = TimeOfDay(
       hour: int.parse(schedule.timeStart.split(':')[0]),
@@ -19,8 +21,10 @@ Widget buildCardStatusPresensi(BuildContext context, List<Schedule> schedules) {
       minute: int.parse(schedule.timeEnd.split(':')[1]),
     );
 
-    final startDateTime = DateTime(now.year, now.month, now.day, startTime.hour, startTime.minute);
-    final endDateTime = DateTime(now.year, now.month, now.day, endTime.hour, endTime.minute);
+    final startDateTime = DateTime(
+        now.year, now.month, now.day, startTime.hour, startTime.minute);
+    final endDateTime =
+        DateTime(now.year, now.month, now.day, endTime.hour, endTime.minute);
 
     if (now.isAfter(startDateTime) && now.isBefore(endDateTime)) {
       currentSchedule = schedule;
@@ -89,24 +93,48 @@ Widget buildCardStatusPresensi(BuildContext context, List<Schedule> schedules) {
                 ),
                 textAlign: TextAlign.center,
               ),
-              SizedBox(
+              const SizedBox(
                 height: 25,
               ),
               SizedBox(
                 height: 30,
-                child: ElevatedButton(
-                  onPressed: () {},
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xff0099FF),
-                  ),
-                  child: Text(
-                    'Check In',
-                    style: TextStyle(
-                      fontSize: 10,
-                      fontWeight: bold,
-                      color: Colors.white,
-                    ),
-                  ),
+                child: FutureBuilder<Map<String, dynamic>>(
+                  future: GetStatusService().getStatus(),
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return Center(
+                        child: CircularProgressIndicator(
+                          valueColor:
+                              AlwaysStoppedAnimation<Color>(Colors.white),
+                        ),
+                      );
+                    } else if (snapshot.hasError) {
+                      return Text(
+                        'Error',
+                        style: TextStyle(
+                          fontSize: 10,
+                          fontWeight: bold,
+                          color: Colors.white,
+                        ),
+                      );
+                    } else {
+                      final isActive = snapshot.data?['isActive'] ?? false;
+                      return ElevatedButton(
+                        onPressed: () {},
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: const Color(0xff0099FF),
+                        ),
+                        child: Text(
+                          isActive ? 'Presensi Akhir' : 'Presensi Awal',
+                          style: TextStyle(
+                            fontSize: 10,
+                            fontWeight: bold,
+                            color: Colors.white,
+                          ),
+                        ),
+                      );
+                    }
+                  },
                 ),
               ),
             ],

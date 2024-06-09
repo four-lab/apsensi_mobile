@@ -51,15 +51,19 @@ class _CalendarPageState extends State<CalendarPage> {
   }
 
   void filterHolidaysByMonth(DateTime date) {
-    holidaysInMonth = holidays.where((holiday) =>
-        holiday.dateStart.year == date.year &&
-        holiday.dateStart.month == date.month).toList();
+    holidaysInMonth = holidays
+        .where((holiday) =>
+            holiday.dateStart.year == date.year &&
+            holiday.dateStart.month == date.month)
+        .toList();
     holidayDates = holidaysInMonth.map((holiday) => holiday.dateStart).toSet();
   }
 
   bool isToday(DateTime date) {
     final now = DateTime.now();
-    return date.year == now.year && date.month == now.month && date.day == now.day;
+    return date.year == now.year &&
+        date.month == now.month &&
+        date.day == now.day;
   }
 
   @override
@@ -173,7 +177,8 @@ class _CalendarPageState extends State<CalendarPage> {
       body: isLoading
           ? Center(child: CircularProgressIndicator())
           : ListView(
-              padding: const EdgeInsetsDirectional.symmetric(horizontal: 34),
+              padding: const EdgeInsetsDirectional.fromSTEB(
+                  16, 0, 16, 80), // Menambahkan padding bawah
               children: [
                 if (errorMessage != null)
                   Center(child: Text(errorMessage!))

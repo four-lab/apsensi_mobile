@@ -32,4 +32,8 @@ class urlApi {
   static String sendAttempt() {
     return baseUrl + '/attendances/attempt';
   }
+
+  static String getStatus() {
+    return baseUrl + '/attendances/status';
+  }
 }

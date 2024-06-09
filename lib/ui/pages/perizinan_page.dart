@@ -126,7 +126,7 @@ class _PerizinanPageState extends State<PerizinanPage> {
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       body: ListView(
         padding: const EdgeInsets.symmetric(
-          horizontal: 34,
+          horizontal: 16,
         ),
         children: [
           tittlePage(),
@@ -173,7 +173,8 @@ Widget listIzin(BuildContext context) {
           },
           style: ButtonStyle(
             backgroundColor: MaterialStateProperty.all<Color>(Colors.blue),
-            padding: MaterialStateProperty.all<EdgeInsetsGeometry>(EdgeInsets.zero),
+            padding:
+                MaterialStateProperty.all<EdgeInsetsGeometry>(EdgeInsets.zero),
             shape: MaterialStateProperty.all<RoundedRectangleBorder>(
               RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(20),
@@ -192,7 +193,9 @@ Widget listIzin(BuildContext context) {
             ),
           ),
         ),
-        SizedBox(height: 10,),
+        SizedBox(
+          height: 10,
+        ),
         ListView(
           shrinkWrap: true,
           physics: NeverScrollableScrollPhysics(),
@@ -239,7 +242,9 @@ Widget listIzin(BuildContext context) {
                                     fontSize: 13,
                                   ),
                                 ),
-                                SizedBox(height: 4), // Adding some spacing between the text
+                                SizedBox(
+                                    height:
+                                        4), // Adding some spacing between the text
                                 Text(
                                   'Diterima',
                                   style: greenTextStyle.copyWith(
@@ -251,7 +256,8 @@ Widget listIzin(BuildContext context) {
                           ),
                         ],
                       ),
-                      SizedBox(height: 8), // Adding some spacing between the rows
+                      SizedBox(
+                          height: 8), // Adding some spacing between the rows
                       Text(
                         'Lama Izin: 2 Hari',
                         style: blackTextStyle.copyWith(
@@ -300,7 +306,9 @@ Widget listIzin(BuildContext context) {
                                     fontSize: 13,
                                   ),
                                 ),
-                                SizedBox(height: 4), // Adding some spacing between the text
+                                SizedBox(
+                                    height:
+                                        4), // Adding some spacing between the text
                                 Text(
                                   'Diterima',
                                   style: greenTextStyle.copyWith(
@@ -312,7 +320,8 @@ Widget listIzin(BuildContext context) {
                           ),
                         ],
                       ),
-                      SizedBox(height: 8), // Adding some spacing between the rows
+                      SizedBox(
+                          height: 8), // Adding some spacing between the rows
                       Text(
                         'Lama Izin: 2 Hari',
                         style: blackTextStyle.copyWith(
@@ -330,5 +339,3 @@ Widget listIzin(BuildContext context) {
     ),
   );
 }
-
-
