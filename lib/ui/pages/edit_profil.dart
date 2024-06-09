@@ -1,7 +1,11 @@
 import 'dart:io';
+import 'package:apsensi_mobile/core/services/editprofile_service.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:apsensi_mobile/shared/theme.dart';
+import 'package:apsensi_mobile/core/services/profile_service.dart';
+import 'package:apsensi_mobile/core/models/user.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:apsensi_mobile/ui/widget/editprofile/editprofile_widget.dart';
 
 class EditProfile extends StatefulWidget {
   @override
@@ -11,6 +15,49 @@ class EditProfile extends StatefulWidget {
 class _EditProfileState extends State<EditProfile> {
   final _formKey = GlobalKey<FormState>();
   File? _image;
+  TextEditingController _emailController = TextEditingController();
+  TextEditingController _fullNameController = TextEditingController();
+  TextEditingController _birthplaceController = TextEditingController();
+  TextEditingController _birthdateController = TextEditingController();
+  TextEditingController _addressController = TextEditingController();
+  String _authToken = ''; // Placeholder for the auth token
+  String _userId = ''; // Placeholder for the user ID
+  String? _profileImageUrl; // URL for the profile image
+
+  @override
+  void initState() {
+    super.initState();
+    _loadUserData();
+  }
+
+  Future<void> _loadUserData() async {
+    try {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      String? token = prefs.getString('authToken');
+      if (token != null) {
+        setState(() {
+          _authToken = token;
+        });
+        print('Auth Token loaded from SharedPreferences: $_authToken');
+      } else {
+        print('No Auth Token found in SharedPreferences');
+      }
+
+      User user = await ProfileService.fetchUser();
+      setState(() {
+        _emailController.text = user.email ?? '';
+        _fullNameController.text = user.fullname ?? '';
+        _birthplaceController.text = user.birthplace ?? '';
+        _birthdateController.text = user.birthdate ?? '';
+        _addressController.text = user.address ?? '';
+        _userId = user.id?.toString() ?? '';
+        _profileImageUrl = user.photos?.front;
+      });
+    } catch (e) {
+      // Handle error
+      print('Error loading user data: $e');
+    }
+  }
 
   Future<void> _pickImage() async {
     final picker = ImagePicker();
@@ -20,6 +67,37 @@ class _EditProfileState extends State<EditProfile> {
       setState(() {
         _image = File(pickedFile.path);
       });
+    }
+  }
+
+  Future<void> _saveProfile() async {
+    if (_formKey.currentState?.validate() ?? false) {
+      // Print all form data before sending
+      print('Saving Profile with Data:');
+      print('User ID: $_userId');
+      print('Email: ${_emailController.text}');
+      print('Full Name: ${_fullNameController.text}');
+      print('Place of Birth: ${_birthplaceController.text}');
+      print('Date of Birth: ${_birthdateController.text}');
+      print('Address: ${_addressController.text}');
+      print('Auth Token: $_authToken');
+
+      bool success = await EditProfileService.editProfile(
+        userId: _userId,
+        email: _emailController.text,
+        fullname: _fullNameController.text,
+        birthplace: _birthplaceController.text,
+        birthdate: DateTime.parse(_birthdateController.text),
+        address: _addressController.text,
+        token: _authToken,
+      );
+
+      if (success) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Profile updated successfully')));
+        Navigator.pop(context); // Navigate back to profile page
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Failed to update profile')));
+      }
     }
   }
 
@@ -62,111 +140,25 @@ class _EditProfileState extends State<EditProfile> {
                   onTap: _pickImage,
                   child: CircleAvatar(
                     radius: 50,
-                    backgroundImage:
-                        _image != null ? FileImage(_image!) : AssetImage('assets/profile/user.png') as ImageProvider,
+                    backgroundImage: _image != null
+                        ? FileImage(_image!)
+                        : (_profileImageUrl != null
+                            ? NetworkImage(_profileImageUrl!)
+                            : AssetImage('assets/profile/user.png')) as ImageProvider,
                   ),
                 ),
                 SizedBox(height: 20),
-                textedit(),
+                EditProfileWidget.textedit(),
                 SizedBox(height: 20),
-                buildTextField('Nama Panggilan', Icons.person),
-                buildTextField('Nama Panjang', Icons.person_outline),
-                buildTextField('Tempat Lahir', Icons.location_city),
-                buildDateField(context, 'Tanggal Lahir'),
-                buildTextField('Alamat', Icons.home),
+                EditProfileWidget.buildTextField('Nama Panjang', Icons.person_outline, controller: _fullNameController),
+                EditProfileWidget.buildTextField('Tempat Lahir', Icons.location_city, controller: _birthplaceController),
+                EditProfileWidget.buildDateField(context, 'Tanggal Lahir', controller: _birthdateController),
+                EditProfileWidget.buildTextField('Alamat', Icons.home, controller: _addressController),
+                EditProfileWidget.buildTextField('Email', Icons.person, controller: _emailController),    
                 SizedBox(height: 20),
-                saveButton(),
+                EditProfileWidget.saveButton(_saveProfile),
               ],
             ),
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget textedit() {
-    return Text(
-      'Lengkapi dan simpan perubahan data profil yang telah anda perbaiki.',
-      textAlign: TextAlign.center,
-      style: blackTextStyle,
-    );
-  }
-
-  Widget buildTextField(String labelText, IconData icon) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 10),
-      child: TextFormField(
-        decoration: InputDecoration(
-          labelText: labelText,
-          prefixIcon: Icon(icon),
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(10),
-          ),
-        ),
-        validator: (value) {
-          if (value == null || value.isEmpty) {
-            return '$labelText harus diisi';
-          }
-          return null;
-        },
-      ),
-    );
-  }
-
-  Widget buildDateField(BuildContext context, String labelText) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 10),
-      child: TextFormField(
-        readOnly: true,
-        decoration: InputDecoration(
-          labelText: labelText,
-          prefixIcon: Icon(Icons.calendar_today),
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(10),
-          ),
-        ),
-        onTap: () async {
-          DateTime? pickedDate = await showDatePicker(
-            context: context,
-            initialDate: DateTime.now(),
-            firstDate: DateTime(1900),
-            lastDate: DateTime(2100),
-          );
-          if (pickedDate != null) {
-            // Handle the selected date here
-          }
-        },
-        validator: (value) {
-          if (value == null || value.isEmpty) {
-            return '$labelText harus diisi';
-          }
-          return null;
-        },
-      ),
-    );
-  }
-
-  Widget saveButton() {
-    return SizedBox(
-      width: double.infinity,
-      height: 50,
-      child: ElevatedButton(
-        onPressed: () {
-          if (_formKey.currentState?.validate() ?? false) {
-            // Simpan perubahan
-          }
-        },
-        style: ElevatedButton.styleFrom(
-          backgroundColor: buttonActiveColor,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(20),
-          ),
-        ),
-        child: Text(
-          'Simpan',
-          style: whiteTextStyle.copyWith(
-            fontSize: 16,
-            fontWeight: semibold,
           ),
         ),
       ),
