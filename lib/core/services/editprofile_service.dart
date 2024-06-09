@@ -6,17 +6,16 @@ class EditProfileService {
   static Future<bool> editProfile({
     required String userId,
     required String email,
-    required String fullName,
-    required String placeOfBirth,
-    required DateTime dateOfBirth,
+    required String fullname,
+    required String birthplace,
+    required DateTime birthdate,
     required String address,
-    required String token, // User's authentication token
+    required String token,
   }) async {
     try {
       final Uri uri = Uri.parse('${Constant.baseUrl}/user');
       String? token = await Constant.getToken();
       print('Fetch user token: $token');
-
       final Map<String, String> headers = {
         'Authorization': 'Bearer $token',
         'Accept': 'application/json',
@@ -26,14 +25,13 @@ class EditProfileService {
       final Map<String, dynamic> body = {
         'userId': userId,
         'email': email,
-        'fullName': fullName,
-        'placeOfBirth': placeOfBirth,
-        'dateOfBirth': dateOfBirth.toIso8601String(),
+        'fullname': fullname,
+        'birthplace': birthplace,
+        'birthdate': birthdate.toIso8601String(),
         'address': address,
       };
 
-      print('Request headers: $headers');
-      print('Request body: ${jsonEncode(body)}');
+      print('Sending request to $uri with body: $body and headers: $headers');
 
       final response = await http.put(
         uri,
@@ -56,7 +54,7 @@ class EditProfileService {
         }
       } else {
         print('Failed to edit profile: ${response.statusCode}');
-        print('Response body: $responseBody'); // Print response body for more details
+        print('Response body: $responseBody');
         return false;
       }
     } catch (e) {

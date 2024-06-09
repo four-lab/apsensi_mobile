@@ -7,6 +7,7 @@ import 'perizinan_page.dart';
 import 'jadwal_page.dart';
 import 'home_page.dart';
 import 'package:apsensi_mobile/core/models/calendar/calendar_model.dart';
+import 'package:intl/intl.dart';
 
 class CalendarPage extends StatefulWidget {
   const CalendarPage({Key? key}) : super(key: key);
@@ -17,7 +18,6 @@ class CalendarPage extends StatefulWidget {
 
 class _CalendarPageState extends State<CalendarPage> {
   late List<GetHolidays> holidays = [];
-  late List<GetHolidays> holidaysInMonth = [];
   late Set<DateTime> holidayDates = {};
   bool isLoading = false;
   String? errorMessage;
@@ -51,10 +51,12 @@ class _CalendarPageState extends State<CalendarPage> {
   }
 
   void filterHolidaysByMonth(DateTime date) {
-    holidaysInMonth = holidays.where((holiday) =>
-        holiday.dateStart.year == date.year &&
-        holiday.dateStart.month == date.month).toList();
-    holidayDates = holidaysInMonth.map((holiday) => holiday.dateStart).toSet();
+    holidayDates = holidays
+        .where((holiday) =>
+            holiday.dateStart.year == date.year &&
+            holiday.dateStart.month == date.month)
+        .map((holiday) => holiday.dateStart)
+        .toSet();
   }
 
   bool isToday(DateTime date) {
@@ -172,27 +174,31 @@ class _CalendarPageState extends State<CalendarPage> {
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       body: isLoading
           ? Center(child: CircularProgressIndicator())
-          : ListView(
-              padding: const EdgeInsetsDirectional.symmetric(horizontal: 34),
-              children: [
-                if (errorMessage != null)
-                  Center(child: Text(errorMessage!))
-                else ...[
-                  KalenderWidget(
-                    focusedDay: focusedDay,
-                    holidaysInMonth: holidaysInMonth,
-                    holidayDates: holidayDates,
-                    filterHolidaysByMonth: filterHolidaysByMonth,
-                    isToday: isToday,
-                    onMonthChanged: (newDate) {
-                      setState(() {
-                        focusedDay = newDate;
-                        fetchHolidays(newDate.month, newDate.year);
-                      });
-                    },
-                  ),
-                ],
-              ],
+          : SingleChildScrollView(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 10),
+                child: Column(
+                  children: [
+                    if (errorMessage != null)
+                      Center(child: Text(errorMessage!))
+                    else ...[
+                      KalenderWidget(
+                        focusedDay: focusedDay,
+                        holidaysInMonth: holidays,
+                        holidayDates: holidayDates,
+                        filterHolidaysByMonth: filterHolidaysByMonth,
+                        isToday: isToday,
+                        onMonthChanged: (newDate) {
+                          setState(() {
+                            focusedDay = newDate;
+                            fetchHolidays(newDate.month, newDate.year);
+                          });
+                        },
+                      ),
+                    ],
+                  ],
+                ),
+              ),
             ),
     );
   }
