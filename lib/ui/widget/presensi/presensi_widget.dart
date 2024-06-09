@@ -7,9 +7,15 @@ import 'package:m7_livelyness_detection/index.dart';
 
 class PresensiWidget extends StatefulWidget {
   final List<Schedule> schedules;
-  final bool hasSchedule; // New parameter to indicate if there are schedules available
+  final bool hasSchedule;
+  final bool isLoading; // Add isLoading parameter
 
-  const PresensiWidget({Key? key, required this.schedules, required this.hasSchedule}) : super(key: key);
+  const PresensiWidget({
+    Key? key,
+    required this.schedules,
+    required this.hasSchedule,
+    required this.isLoading, // Add isLoading parameter
+  }) : super(key: key);
 
   @override
   _PresensiWidgetState createState() => _PresensiWidgetState();
@@ -131,11 +137,9 @@ class _PresensiWidgetState extends State<PresensiWidget> {
     });
 
     try {
-      // Validasi lokasi terlebih dahulu
       bool isLocationValid = await _checkInController.checkIn(context);
 
       if (isLocationValid) {
-                // Jika validasi lokasi berhasil, lanjutkan dengan deteksi kehadiran
         final M7CapturedImage? detectionResponse =
             await M7LivelynessDetection.instance.detectLivelyness(context,
                 config: M7DetectionConfig(steps: [
@@ -144,8 +148,9 @@ class _PresensiWidgetState extends State<PresensiWidget> {
 
         if (detectionResponse != null) {
           showSuccessDialog();
+        } else {
+          showErrorDialog("Deteksi kehadiran gagal.");
         }
-        showSuccessDialog();
       } else {
         showErrorDialog("Lokasi tidak valid.");
       }
@@ -185,98 +190,102 @@ class _PresensiWidgetState extends State<PresensiWidget> {
       }
     }
 
-    return Container(
-      width: double.infinity,
-      height: 160,
-      margin: const EdgeInsets.only(
-        top: 26,
-        left: 16,
-        right: 16,
-      ),
-      padding: const EdgeInsets.all(12),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(10),
-        color: Colors.white,
-      ),
-      child: Column(
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                'Presensi Saat Ini',
-                style: blackTextStyle.copyWith(
-                  fontSize: 12,
-                  fontWeight: extrabold,
+    return widget.isLoading
+        ? Center(child: CircularProgressIndicator())
+        : Container(
+            width: double.infinity,
+            height: 160,
+            margin: const EdgeInsets.only(
+              top: 26,
+              left: 16,
+              right: 16,
+            ),
+            padding: const EdgeInsets.all(12),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(10),
+              color: Colors.white,
+            ),
+            child: Column(
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      'Presensi Saat Ini',
+                      style: blackTextStyle.copyWith(
+                        fontSize: 12,
+                        fontWeight: extrabold,
+                      ),
+                    ),
+                    Text(
+                      currentDate,
+                      style: blackTextStyle.copyWith(
+                        fontSize: 12,
+                        fontWeight: extrabold,
+                      ),
+                    ),
+                  ],
                 ),
-              ),
-              Text(
-                currentDate,
-                style: blackTextStyle.copyWith(
-                  fontSize: 12,
-                  fontWeight: extrabold,
+                const SizedBox(
+                  height: 7,
                 ),
-              ),
-            ],
-          ),
-          const SizedBox(
-            height: 7,
-          ),
-          if (currentSchedule != null) ...[
-            Text(
-              '${currentSchedule.formattedTimeStart}-${currentSchedule.formattedTimeEnd}',
-            style: blackTextStyle.copyWith(
-              fontSize: 19,
-              fontWeight: bold,
-            ),
-            ),
-            const SizedBox(
-              height: 7,
-            ),
-            Text(
-              currentSchedule.course,
-            style: blackTextStyle.copyWith(
-              fontSize: 13,
-              fontWeight: bold,
-            ),
-            ),
-            Spacer(),
-            SizedBox(
-              width: double.infinity,
-              height: 30,
-              child: ElevatedButton(
-                onPressed: _isLoading || !widget.hasSchedule ? null : _startPresence,
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color(0xff0099FF),
-                ),
-                child: _isLoading
-                    ? const CircularProgressIndicator(color: Colors.white)
-                    : const Text(
-                  'Check In',
-                  style: TextStyle(
-                    fontSize: 10,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white,
+                if (currentSchedule != null) ...[
+                  Text(
+                    '${currentSchedule.formattedTimeStart}-${currentSchedule.formattedTimeEnd}',
+                    style: blackTextStyle.copyWith(
+                      fontSize: 19,
+                      fontWeight: bold,
+                    ),
                   ),
-                ),
-              ),
-            ),
-          ] else ...[
-            Expanded(
-              child: Center(
-                child: Text(
-                  'Tidak ada presensi untuk saat ini',
-                  style: blackTextStyle.copyWith(
-                    fontSize: 13,
-                    fontWeight: bold,
+                  const SizedBox(
+                    height: 7,
                   ),
-                  textAlign: TextAlign.center,
-                ),
-              ),
+                  Text(
+                    currentSchedule.course,
+                    style: blackTextStyle.copyWith(
+                      fontSize: 13,
+                      fontWeight: bold,
+                    ),
+                  ),
+                  Spacer(),
+                  SizedBox(
+                    width: double.infinity,
+                    height: 30,
+                    child: ElevatedButton(
+                      onPressed: _isLoading || !widget.hasSchedule
+                          ? null
+                          : _startPresence,
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: const Color(0xff0099FF),
+                      ),
+                      child: _isLoading
+                          ? const CircularProgressIndicator(color: Colors.white)
+                          : const Text(
+                              'Check In',
+                              style: TextStyle(
+                                fontSize: 10,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white,
+                              ),
+                            ),
+                    ),
+                  ),
+                ] else ...[
+                  Expanded(
+                    child: Center(
+                      child: Text(
+                        'Tidak ada presensi untuk saat ini',
+                        style: blackTextStyle.copyWith(
+                          fontSize: 13,
+                          fontWeight: bold,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+                  ),
+                ],
+              ],
             ),
-          ],
-        ],
-      ),
-    );
+          );
   }
 }

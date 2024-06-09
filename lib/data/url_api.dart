@@ -28,4 +28,8 @@ class urlApi {
   static String sendLocation() {
     return baseUrl + '/attendances/valid-area';
   }
+
+  static String sendAttempt() {
+    return baseUrl + '/attendances/attempt';
+  }
 }

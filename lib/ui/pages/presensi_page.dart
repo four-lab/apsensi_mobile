@@ -16,9 +16,9 @@ class PresensiPage extends StatefulWidget {
 
 class _PresensiPageState extends State<PresensiPage> {
   final AuthController authController = Get.put(AuthController());
-  bool _isLoading = false;
   bool _hasSchedule = true;
   List<Schedule> _scheduleList = [];
+  bool _isLoading = false;
 
   @override
   void initState() {
@@ -30,7 +30,7 @@ class _PresensiPageState extends State<PresensiPage> {
   void _fetchSchedulesForToday(DateTime date) async {
     setState(() {
       _isLoading = true;
-      _hasSchedule = true;
+      // _hasSchedule = true;
     });
 
     try {
@@ -76,12 +76,11 @@ class _PresensiPageState extends State<PresensiPage> {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            _isLoading
-                ? CircularProgressIndicator() // Show loading indicator while fetching schedules
-                : _hasSchedule
-                    ? PresensiWidget(
-                        schedules: _scheduleList, hasSchedule: _hasSchedule)
-                    : CircularProgressIndicator(), // Alternatively, you can show a different loading indicator here
+            PresensiWidget(
+              schedules: _scheduleList,
+              hasSchedule: _hasSchedule,
+              isLoading: _isLoading,
+            ),
             const SizedBox(height: 20),
             Container(
               margin: const EdgeInsets.symmetric(horizontal: 16),
