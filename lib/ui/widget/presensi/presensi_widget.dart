@@ -260,7 +260,7 @@ class _PresensiWidgetState extends State<PresensiWidget> {
                         textAlign: TextAlign.center,
                       ),
                       const SizedBox(
-                        height: 25,
+                        height: 15,
                       ),
                       SizedBox(
                         height: 30,
@@ -282,9 +282,9 @@ class _PresensiWidgetState extends State<PresensiWidget> {
                                   backgroundColor: const Color(0xff0099FF),
                                 ),
                                 child: Text(
-                                  'Error',
+                                  'Invalid',
                                   style: TextStyle(
-                                    fontSize: 10,
+                                    fontSize: 13,
                                     fontWeight: bold,
                                     color: Colors.white,
                                   ),
@@ -306,7 +306,7 @@ class _PresensiWidgetState extends State<PresensiWidget> {
                                             ? 'Akhiri Presensi'
                                             : 'Mulai Presensi',
                                         style: TextStyle(
-                                          fontSize: 10,
+                                          fontSize: 13,
                                           fontWeight: bold,
                                           color: Colors.white,
                                         ),

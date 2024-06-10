@@ -94,7 +94,7 @@ Widget buildCardStatusPresensi(BuildContext context, List<Schedule> schedules) {
                 textAlign: TextAlign.center,
               ),
               const SizedBox(
-                height: 25,
+                height: 15,
               ),
               SizedBox(
                 height: 30,
@@ -110,9 +110,9 @@ Widget buildCardStatusPresensi(BuildContext context, List<Schedule> schedules) {
                       );
                     } else if (snapshot.hasError) {
                       return Text(
-                        'Error',
+                        'Invalid',
                         style: TextStyle(
-                          fontSize: 10,
+                          fontSize: 13,
                           fontWeight: bold,
                           color: Colors.white,
                         ),
@@ -127,7 +127,7 @@ Widget buildCardStatusPresensi(BuildContext context, List<Schedule> schedules) {
                         child: Text(
                           isActive ? 'Presensi Akhir' : 'Presensi Awal',
                           style: TextStyle(
-                            fontSize: 10,
+                            fontSize: 13,
                             fontWeight: bold,
                             color: Colors.white,
                           ),
