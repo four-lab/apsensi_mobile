@@ -5,6 +5,7 @@ import 'package:apsensi_mobile/core/models/jadwal/schedule.dart';
 import 'package:apsensi_mobile/core/controllers/checkin_controller.dart';
 import 'package:m7_livelyness_detection/index.dart';
 import 'package:apsensi_mobile/core/services/get_status_service.dart';
+import 'package:apsensi_mobile/core/controllers/capture_controller.dart';
 
 class PresensiWidget extends StatefulWidget {
   final List<Schedule> schedules;
@@ -24,113 +25,8 @@ class PresensiWidget extends StatefulWidget {
 
 class _PresensiWidgetState extends State<PresensiWidget> {
   final CheckInController _checkInController = CheckInController();
+  final CaptureController _captureController = CaptureController();
   bool _isLoading = false;
-
-  void showSuccessDialog() {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        Future.delayed(Duration(seconds: 10), () {
-          Navigator.of(context).pop(true);
-        });
-        return AlertDialog(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(20),
-          ),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              const Icon(
-                Icons.check_circle,
-                color: Colors.green,
-                size: 100,
-              ),
-              SizedBox(height: 16),
-              const Text(
-                'Presensi Berhasil',
-                style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              SizedBox(height: 8),
-              Text(
-                'Anda baru saja melakukan presensi pada pukul ${DateFormat('HH:mm:ss').format(DateTime.now())} WIB',
-                textAlign: TextAlign.center,
-              ),
-              SizedBox(height: 16),
-              const Text(
-                'Selamat bekerja dan terima kasih telah melakukan presensi',
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontSize: 12,
-                  color: Colors.grey,
-                ),
-              ),
-              SizedBox(height: 16),
-              ElevatedButton(
-                onPressed: () {
-                  Navigator.of(context).pop(true);
-                },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.blue,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                ),
-                child: Text('Kembali Ke Beranda'),
-              ),
-            ],
-          ),
-        );
-      },
-    );
-  }
-
-  void showErrorDialog(String message) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(20),
-          ),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              const Icon(
-                Icons.error,
-                color: Colors.red,
-                size: 100,
-              ),
-              SizedBox(height: 16),
-              Text(
-                message,
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                ),
-                textAlign: TextAlign.center,
-              ),
-              SizedBox(height: 8),
-              ElevatedButton(
-                onPressed: () {
-                  Navigator.of(context).pop(true);
-                },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.red,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                ),
-                child: Text('Tutup'),
-              ),
-            ],
-          ),
-        );
-      },
-    );
-  }
 
   Future<void> _startPresence() async {
     setState(() {
@@ -142,24 +38,34 @@ class _PresensiWidgetState extends State<PresensiWidget> {
 
       if (isLocationValid) {
         final M7CapturedImage? detectionResponse =
-            await M7LivelynessDetection.instance.detectLivelyness(context,
-                config: M7DetectionConfig(steps: [
-                  M7LivelynessStepItem(
-                      step: M7LivelynessStep.blink,
-                      title: "Kedipkan Mata",
-                      isCompleted: false)
-                ]));
+            await M7LivelynessDetection.instance.detectLivelyness(
+          context,
+          config: M7DetectionConfig(steps: [
+            M7LivelynessStepItem(
+              step: M7LivelynessStep.blink,
+              title: "Kedipkan Mata",
+              isCompleted: false,
+            ),
+          ]),
+        );
 
         if (detectionResponse != null) {
-          showSuccessDialog();
+          print("Gambar berhasil di-scan, path: ${detectionResponse.imgPath}");
+          await _captureController.captureAndUpload(
+              context, detectionResponse.imgPath);
         } else {
-          showErrorDialog("Deteksi kehadiran gagal.");
+          print("Gagal mendeteksi wajah.");
+          _captureController.showErrorDialog(
+              context, "Gagal mendeteksi wajah.");
         }
       } else {
-        showErrorDialog("Lokasi tidak valid.");
+        print("Lokasi tidak valid.");
+        _captureController.showErrorDialog(context, "Lokasi tidak valid.");
       }
     } catch (e) {
-      showErrorDialog("Gagal melakukan presensi: $e");
+      print("Error saat melakukan presensi: $e");
+      _captureController.showErrorDialog(
+          context, "Gagal melakukan presensi: $e");
     } finally {
       setState(() {
         _isLoading = false;

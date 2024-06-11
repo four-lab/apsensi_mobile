@@ -1,13 +1,14 @@
+import 'dart:io';
+import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:m7_livelyness_detection/index.dart';
 import 'package:apsensi_mobile/core/services/image_upload_service.dart';
-import 'package:intl/intl.dart';
+import 'package:image/image.dart' as img;
 
 class CaptureController {
   final ImageUploadService _imageUploadService = ImageUploadService();
 
-  Future<void> captureAndUpload(BuildContext context) async {
+  Future<void> captureAndUpload(BuildContext context, String imagePath) async {
     try {
       // Memeriksa izin lokasi
       bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
@@ -32,45 +33,53 @@ class CaptureController {
       Position position = await Geolocator.getCurrentPosition(
           desiredAccuracy: LocationAccuracy.high);
 
-      // Menangkap gambar menggunakan M7LivelynessDetection
-      final M7CapturedImage? detectionResponse =
-          await M7LivelynessDetection.instance.detectLivelyness(
-        context,
-        config: M7DetectionConfig(
-          steps: [
-            M7LivelynessStepItem(
-                step: M7LivelynessStep.blink,
-                title: "Kedipkan Mata",
-                isCompleted: false)
-          ],
-        ),
-      );
+      print(
+          "Lokasi berhasil didapatkan: (${position.latitude}, ${position.longitude})");
 
-      if (detectionResponse == null) {
-        throw Exception('Liveness detection failed.');
-      }
+      // Kompresi gambar sebelum mengupload
+      Uint8List compressedImage = await compressImage(File(imagePath));
 
       // Mengirim gambar beserta lokasi ke API
       Map<String, dynamic> response =
           await _imageUploadService.uploadImageWithLocation(
-        detectionResponse.imgPath,
+        compressedImage,
         position.latitude,
         position.longitude,
       );
 
       if (response['success']) {
-        showSuccessDialog(context, response['message']);
+        print("Presensi berhasil: ${response['message']}");
+        showSuccessDialog(context, response['message'] ?? 'Presensi berhasil.');
       } else {
-        showErrorDialog(context, response['message']);
+        print("Gagal melakukan presensi: ${response['message']}");
+        showErrorDialog(
+            context, response['message'] ?? 'Gagal melakukan presensi.');
       }
     } catch (e) {
+      print("Error: $e");
       showErrorDialog(context, e.toString());
     }
+  }
+
+  Future<Uint8List> compressImage(File file) async {
+    // Membaca gambar dari file
+    img.Image? image = img.decodeImage(file.readAsBytesSync());
+    if (image == null) {
+      throw Exception('Failed to decode image.');
+    }
+
+    // Mengkompresi gambar
+    img.Image resizedImage = img.copyResize(image, width: 600); // Resize image
+    Uint8List compressedImage = Uint8List.fromList(
+        img.encodeJpg(resizedImage, quality: 85)); // Compress image
+
+    return compressedImage;
   }
 
   void showSuccessDialog(BuildContext context, String message) {
     showDialog(
       context: context,
+      barrierDismissible: false,
       builder: (BuildContext context) {
         Future.delayed(Duration(seconds: 10), () {
           Navigator.of(context).pop(true);
@@ -112,6 +121,7 @@ class CaptureController {
   void showErrorDialog(BuildContext context, String message) {
     showDialog(
       context: context,
+      barrierDismissible: false,
       builder: (BuildContext context) {
         return AlertDialog(
           shape:
