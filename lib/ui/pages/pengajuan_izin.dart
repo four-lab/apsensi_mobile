@@ -1,8 +1,12 @@
+import 'package:apsensi_mobile/ui/pages/perizinan_page.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:apsensi_mobile/shared/theme.dart';
+import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter_pdfview/flutter_pdfview.dart';
+import 'package:apsensi_mobile/core/services/perizinan_service.dart';
+import 'dart:io';
 
 class PengajuanIzinPage extends StatefulWidget {
   const PengajuanIzinPage({Key? key}) : super(key: key);
@@ -17,6 +21,7 @@ class _PengajuanIzinPageState extends State<PengajuanIzinPage> {
   TextEditingController dateController = TextEditingController();
   TextEditingController daysController = TextEditingController();
   String? pdfPath;
+  bool _isSubmitting  = false;
 
   @override
   Widget build(BuildContext context) {
@@ -27,8 +32,8 @@ class _PengajuanIzinPageState extends State<PengajuanIzinPage> {
         title: Text(
           'Pengajuan Izin',
           textAlign: TextAlign.center,
-          style: TextStyle(
-            fontSize: 20,
+          style: blackTextStyle.copyWith(
+            fontSize: 18,
             fontWeight: FontWeight.bold,
           ),
         ),
@@ -56,6 +61,7 @@ class _PengajuanIzinPageState extends State<PengajuanIzinPage> {
     return Container(
       margin: const EdgeInsets.only(
         top: 15,
+        bottom: 15
       ),
       padding: const EdgeInsetsDirectional.all(10),
       decoration: BoxDecoration(
@@ -174,6 +180,9 @@ class _PengajuanIzinPageState extends State<PengajuanIzinPage> {
                         contentPadding: EdgeInsets.all(10),
                       ),
                       keyboardType: TextInputType.number,
+                      inputFormatters: <TextInputFormatter>[
+                        FilteringTextInputFormatter.digitsOnly
+                      ],
                     ),
                   ],
                 ),
@@ -251,15 +260,96 @@ class _PengajuanIzinPageState extends State<PengajuanIzinPage> {
           SizedBox(
             width: double.infinity,
             height: 40,
-            child: ElevatedButton(
-              onPressed: () {
-                // Fungsi yang akan dijalankan saat tombol ditekan
+            child: ElevatedButton( // Fungsi yang akan dijalankan saat tombol ditekan
+              onPressed: _isSubmitting ? null : () async {
+                if (_selectedItem != null &&
+                descriptionController.text.isNotEmpty &&
+                dateController.text.isNotEmpty &&
+                daysController.text.isNotEmpty &&
+                pdfPath != null) {
+
+                  setState(() {
+                    _isSubmitting = true;
+                  });
+
+                  try {
+                    final file = File(pdfPath!);
+                    final fileStat = await file.stat();
+                    var result = await PerizinanService().pengajuan(
+                      type: _selectedItem!, 
+                      description: descriptionController.text, 
+                      document: PlatformFile(
+                        name: pdfPath!.split('/').last, 
+                        path: pdfPath!,
+                        size: fileStat.size
+                        ), 
+                      duration: daysController.text, 
+                      date: dateController.text
+                    );
+
+                    if (result['meta']['code'] == 200) {
+                      // ScaffoldMessenger.of(context).showSnackBar(
+                      //   const SnackBar(
+                      //     content: Text(
+                      //       'Pengajuan izin berhasil!',
+                      //       style: TextStyle(color: Colors.white),
+                      //     ),
+                      //     backgroundColor: Colors.green,
+                      //   ),
+                      // );
+                      Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(builder: (context) => PerizinanPage()),
+                      );
+                    } else {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text(
+                            'Pengajuan izin gagal: ${result['meta']['message']}',
+                            style: TextStyle(color: Colors.white)
+                          ),
+                          backgroundColor: Colors.red,
+                        ),
+                      );
+                    }
+                  } catch (e) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: 
+                        Text(
+                          'Pengajuan izin gagal: $e',
+                          style: TextStyle(color: Colors.white)
+                        ),
+                        backgroundColor: Colors.red,
+                      ),
+                    );
+                  } finally {
+                    setState(() {
+                      _isSubmitting = false;
+                    });
+                  }
+                } else {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: 
+                      Text(
+                        'Semua kolom wajib diisi',
+                        style: TextStyle(color: Colors.white)
+                      ),
+                      backgroundColor: Colors.red,
+                    ),
+                  );
+                }
               },
-              child: Text('Ajukan'),
               style: ElevatedButton.styleFrom(
-                foregroundColor: Colors.black,
+                foregroundColor: Colors.white,
                 backgroundColor: buttonActiveColor,
               ),
+              child: _isSubmitting
+                ? const CircularProgressIndicator(
+                  valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                )
+                : const Text('Ajukan'),
             ),
           ),
         ],
