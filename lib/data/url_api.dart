@@ -36,4 +36,8 @@ class urlApi {
   static String getStatus() {
     return baseUrl + '/attendances/status';
   }
+
+  static String getLogPresensi() {
+    return baseUrl + '/attendances';
+  }
 }

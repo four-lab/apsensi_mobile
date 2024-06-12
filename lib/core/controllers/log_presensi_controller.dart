@@ -14,8 +14,10 @@ class LogPresensiController extends GetxController {
   void fetchLogPresensi() async {
     isLoading(true);
     try {
-      var logs = await LogPresensiService.fetchLogPresensi();
+      var logs = await LogPresensiService().getLogPresensi();
       logPresensiList.assignAll(logs);
+    } catch (error) {
+      print('Error fetching log presensi: $error');
     } finally {
       isLoading(false);
     }
