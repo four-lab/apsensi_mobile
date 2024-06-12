@@ -56,13 +56,13 @@ class _PresensiPageState extends State<PresensiPage> {
 
   Color _getStatusColor(String status) {
     switch (status.toLowerCase()) {
-      case 'hadir':
+      case 'present':
         return Colors.green[100]!;
-      case 'telat':
+      case 'late':
         return Colors.yellow[100]!;
       case 'absent':
         return Colors.red[100]!;
-      case 'izin':
+      case 'excused':
         return Colors.blue[100]!;
       default:
         return Colors.grey[100]!;
