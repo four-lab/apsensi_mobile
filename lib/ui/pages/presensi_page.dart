@@ -121,11 +121,11 @@ class _PresensiPageState extends State<PresensiPage> {
       backgroundColor: transparentBackground,
       appBar: AppBar(
         backgroundColor: Colors.transparent,
-        title: const Text(
+        title: Text(
           'Presensi',
           textAlign: TextAlign.center,
-          style: TextStyle(
-            fontSize: 20,
+          style: blackTextStyle.copyWith(
+            fontSize: 18,
             fontWeight: FontWeight.bold,
           ),
         ),
@@ -148,6 +148,7 @@ class _PresensiPageState extends State<PresensiPage> {
             ),
             const SizedBox(height: 20),
             _buildLogPresensi(),
+            const SizedBox(height: 15),
           ],
         ),
       ),

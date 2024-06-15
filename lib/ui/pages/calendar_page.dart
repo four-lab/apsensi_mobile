@@ -178,7 +178,7 @@ class _CalendarPageState extends State<CalendarPage> {
           ? Center(child: CircularProgressIndicator())
           : SingleChildScrollView(
               child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 10),
+                padding: const EdgeInsets.symmetric(horizontal: 16),
                 child: Column(
                   children: [
                     if (errorMessage != null)

@@ -218,9 +218,9 @@ class _JadwalPageState extends State<JadwalPage> {
                         child: Center(
                           child: Text(
                             'Tidak ada jadwal',
-                            style: GoogleFonts.poppins(
-                              fontSize: 16,
-                              color: Colors.black,
+                            style: blackTextStyle.copyWith(
+                              fontSize: 14,
+                              fontWeight: bold
                             ),
                           ),
                         ),

@@ -1,3 +1,4 @@
+import 'package:apsensi_mobile/shared/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:table_calendar/table_calendar.dart';
@@ -28,7 +29,10 @@ class KalenderWidget extends StatefulWidget {
 class _KalenderWidgetState extends State<KalenderWidget> {
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
+    return Container(
+      margin: const EdgeInsets.only(
+        bottom: 35,
+      ),
       child: Column(
         children: [
           titlekalender(),
@@ -44,9 +48,9 @@ class _KalenderWidgetState extends State<KalenderWidget> {
       margin: const EdgeInsets.only(top: 40),
       child: Text(
         'Kalender',
-        style: TextStyle(
+        style: blackTextStyle.copyWith(
           fontSize: 18,
-          fontWeight: FontWeight.bold,
+          fontWeight: bold,
         ),
         textAlign: TextAlign.center,
       ),
@@ -57,16 +61,16 @@ class _KalenderWidgetState extends State<KalenderWidget> {
     return Container(
       margin: const EdgeInsets.only(top: 15),
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(20),
+        borderRadius: BorderRadius.circular(10),
         color: Colors.white,
-        boxShadow: [
-          BoxShadow(
-            color: Colors.grey.withOpacity(0.5),
-            spreadRadius: 3,
-            blurRadius: 5,
-            offset: const Offset(3, 3),
-          ),
-        ],
+        // boxShadow: [
+        //   BoxShadow(
+        //     color: Colors.grey.withOpacity(0.5),
+        //     spreadRadius: 3,
+        //     blurRadius: 5,
+        //     offset: const Offset(3, 3),
+        //   ),
+        // ],
       ),
       child: TableCalendar(
         calendarBuilders: CalendarBuilders(
@@ -165,18 +169,19 @@ class _KalenderWidgetState extends State<KalenderWidget> {
 
     if (filteredHolidays.isEmpty) {
       return Container(
+        
         margin: const EdgeInsets.only(top: 15),
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(20),
+          borderRadius: BorderRadius.circular(10),
           color: Colors.white,
-          boxShadow: [
-            BoxShadow(
-              color: Colors.grey.withOpacity(0.5),
-              spreadRadius: 3,
-              blurRadius: 5,
-              offset: const Offset(3, 3),
-            ),
-          ],
+          // boxShadow: [
+          //   BoxShadow(
+          //     color: Colors.grey.withOpacity(0.5),
+          //     spreadRadius: 3,
+          //     blurRadius: 5,
+          //     offset: const Offset(3, 3),
+          //   ),
+          // ],
         ),
         child: const Center(
           child: Padding(
@@ -189,16 +194,16 @@ class _KalenderWidgetState extends State<KalenderWidget> {
       return Container(
         margin: const EdgeInsets.only(top: 15),
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(20),
+          borderRadius: BorderRadius.circular(10),
           color: Colors.white,
-          boxShadow: [
-            BoxShadow(
-              color: Colors.grey.withOpacity(0.5),
-              spreadRadius: 3,
-              blurRadius: 5,
-              offset: const Offset(3, 3),
-            ),
-          ],
+          // boxShadow: [
+          //   BoxShadow(
+          //     color: Colors.grey.withOpacity(0.5),
+          //     spreadRadius: 3,
+          //     blurRadius: 5,
+          //     offset: const Offset(3, 3),
+          //   ),
+          // ],
         ),
         child: DataTable(
           columns: const [

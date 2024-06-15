@@ -1,5 +1,6 @@
 import 'package:apsensi_mobile/core/models/user.dart';
 import 'package:apsensi_mobile/core/services/profile_service.dart';
+import 'package:apsensi_mobile/shared/theme.dart';
 import 'package:apsensi_mobile/ui/widget/profile/profilepage_widget.dart';
 import 'package:flutter/material.dart';
 
@@ -15,7 +16,7 @@ class ProfilePage extends StatelessWidget {
         title: Text(
           'Profile',
           textAlign: TextAlign.center,
-          style: TextStyle(
+          style: blackTextStyle.copyWith(
             fontSize: 20,
             fontWeight: FontWeight.bold,
           ),

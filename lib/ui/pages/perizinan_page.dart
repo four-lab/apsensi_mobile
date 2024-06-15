@@ -235,11 +235,12 @@ Widget listIzin(BuildContext context, List<Perizinan>? excuses, bool hasIzin) {
           child: Container(
             padding: const EdgeInsets.symmetric(vertical: 10),
             alignment: Alignment.center,
-            child: const Text(
+            child: Text(
               'Ajukan Izin Baru',
-              style: TextStyle(
+              style: blackTextStyle.copyWith(
                 color: Colors.white,
                 fontSize: 14,
+                fontWeight: semibold
               ),
             ),
           ),

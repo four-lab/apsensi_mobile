@@ -48,7 +48,7 @@ class _PengajuanIzinPageState extends State<PengajuanIzinPage> {
       ),
       body: ListView(
         padding: const EdgeInsetsDirectional.symmetric(
-          horizontal: 12,
+          horizontal: 16,
         ),
         children: [
           pengajuanForm(),
@@ -63,18 +63,18 @@ class _PengajuanIzinPageState extends State<PengajuanIzinPage> {
         top: 15,
         bottom: 15
       ),
-      padding: const EdgeInsetsDirectional.all(10),
+      padding: const EdgeInsetsDirectional.all(12),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(20),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.grey.withOpacity(0.5),
-            spreadRadius: 3,
-            blurRadius: 5,
-            offset: Offset(3, 3),
-          ),
-        ],
+        // boxShadow: [
+        //   BoxShadow(
+        //     color: Colors.grey.withOpacity(0.5),
+        //     spreadRadius: 3,
+        //     blurRadius: 5,
+        //     offset: Offset(3, 3),
+        //   ),
+        // ],
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -349,7 +349,14 @@ class _PengajuanIzinPageState extends State<PengajuanIzinPage> {
                 ? const CircularProgressIndicator(
                   valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
                 )
-                : const Text('Ajukan'),
+                :  Text(
+                  'Ajukan',
+                  style: blackTextStyle.copyWith(
+                  color: Colors.white,
+                  fontSize: 14,
+                  fontWeight: semibold
+                  ),
+                ),
             ),
           ),
         ],

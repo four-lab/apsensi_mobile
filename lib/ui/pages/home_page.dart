@@ -179,53 +179,53 @@ class _HomePageState extends State<HomePage> {
           children: [
             buildProfile(context, user),
             _isLoading
-                ? Center(
-                    child: Container(
-                      height: 160,
-                      margin: const EdgeInsets.only(
-                        top: 26,
-                        left: 16,
-                        right: 16,
-                      ),
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      child: Center(
-                        child: CircularProgressIndicator(),
-                      ),
+              ? Center(
+                  child: Container(
+                    height: 160,
+                    margin: const EdgeInsets.only(
+                      top: 26,
+                      left: 16,
+                      right: 16,
                     ),
-                  )
-                : _hasSchedule
-                    ? buildCardStatusPresensi(context, _scheduleList)
-                    : Center(
-                        child: Container(
-                          height: 160,
-                          margin: const EdgeInsets.only(
-                            top: 26,
-                          ),
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          child: Center(
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Icon(Icons.error, color: Colors.grey),
-                                const SizedBox(height: 8),
-                                Text(
-                                  'Tidak ada presensi untuk saat ini',
-                                  style: blackTextStyle.copyWith(
-                                    fontSize: 13,
-                                    fontWeight: bold,
-                                  ),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: Center(
+                      child: CircularProgressIndicator(),
+                    ),
+                  ),
+                )
+              : _hasSchedule
+                  ? buildCardStatusPresensi(context, _scheduleList)
+                  : Center(
+                      child: Container(
+                        height: 160,
+                        margin: const EdgeInsets.only(
+                          top: 26,
+                        ),
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: Center(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Icon(Icons.error, color: Colors.grey),
+                              const SizedBox(height: 8),
+                              Text(
+                                'Tidak ada presensi untuk saat ini',
+                                style: blackTextStyle.copyWith(
+                                  fontSize: 13,
+                                  fontWeight: bold,
                                 ),
-                              ],
-                            ),
+                              ),
+                            ],
                           ),
                         ),
                       ),
+                    ),
             _isLoading
                 ? Center(
                     child: Container(

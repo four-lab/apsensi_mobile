@@ -1,4 +1,5 @@
 import 'package:apsensi_mobile/core/controllers/auth_controller.dart';
+import 'package:apsensi_mobile/shared/theme.dart';
 import 'package:apsensi_mobile/ui/pages/edit_profil.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -309,8 +310,9 @@ Widget editButton(BuildContext context) {
       ),
       child: Text(
         'Edit Profile',
-        style: TextStyle(
+        style: whiteTextStyle.copyWith(
           color: Colors.white,
+          fontWeight: semibold
         ),
       ),
     ),
@@ -333,8 +335,9 @@ Widget logoutButton(BuildContext context) {
       ),
       child: Text(
         'Logout',
-        style: TextStyle(
+        style: whiteTextStyle.copyWith(
           color: Colors.white,
+          fontWeight: semibold
         ),
       ),
     ),

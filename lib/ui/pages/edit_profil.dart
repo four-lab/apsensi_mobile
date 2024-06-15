@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:apsensi_mobile/core/services/editprofile_service.dart';
+import 'package:apsensi_mobile/shared/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:apsensi_mobile/core/services/profile_service.dart';
@@ -110,7 +111,7 @@ class _EditProfileState extends State<EditProfile> {
         title: Text(
           'Edit Profile',
           textAlign: TextAlign.center,
-          style: TextStyle(
+          style: blackTextStyle.copyWith(
             fontSize: 20,
             fontWeight: FontWeight.bold,
           ),
