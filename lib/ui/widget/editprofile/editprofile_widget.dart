@@ -53,7 +53,7 @@ class EditProfileWidget {
             lastDate: DateTime(2100),
           );
           if (pickedDate != null) {
-            controller.text = pickedDate.toIso8601String().split('T').first; // Update the controller with the selected date in YYYY-MM-DD format
+            controller.text = pickedDate.toIso8601String().split('T').first;
           }
         },
         validator: (value) {

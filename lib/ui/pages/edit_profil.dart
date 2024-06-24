@@ -1,12 +1,13 @@
 import 'dart:io';
-import 'package:apsensi_mobile/core/services/editprofile_service.dart';
-import 'package:apsensi_mobile/shared/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:apsensi_mobile/core/services/editprofile_service.dart';
 import 'package:apsensi_mobile/core/services/profile_service.dart';
 import 'package:apsensi_mobile/core/models/user.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:apsensi_mobile/shared/theme.dart';
 import 'package:apsensi_mobile/ui/widget/editprofile/editprofile_widget.dart';
+import 'package:apsensi_mobile/ui/pages/profile_page.dart'; // Ensure you have the correct import for ProfilePage
 
 class EditProfile extends StatefulWidget {
   @override
@@ -16,11 +17,14 @@ class EditProfile extends StatefulWidget {
 class _EditProfileState extends State<EditProfile> {
   final _formKey = GlobalKey<FormState>();
   File? _image;
+  final ImagePicker _picker = ImagePicker();
+
   TextEditingController _emailController = TextEditingController();
   TextEditingController _fullNameController = TextEditingController();
   TextEditingController _birthplaceController = TextEditingController();
   TextEditingController _birthdateController = TextEditingController();
   TextEditingController _addressController = TextEditingController();
+
   String _authToken = ''; // Placeholder for the auth token
   String _userId = ''; // Placeholder for the user ID
   String? _profileImageUrl; // URL for the profile image
@@ -61,13 +65,15 @@ class _EditProfileState extends State<EditProfile> {
   }
 
   Future<void> _pickImage() async {
-    final picker = ImagePicker();
-    final pickedFile = await picker.pickImage(source: ImageSource.gallery);
-
-    if (pickedFile != null) {
-      setState(() {
-        _image = File(pickedFile.path);
-      });
+    try {
+      final pickedFile = await _picker.pickImage(source: ImageSource.gallery);
+      if (pickedFile != null) {
+        setState(() {
+          _image = File(pickedFile.path);
+        });
+      }
+    } catch (e) {
+      print('Error picking image: $e');
     }
   }
 
@@ -94,10 +100,13 @@ class _EditProfileState extends State<EditProfile> {
       );
 
       if (success) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Profile updated successfully')));
-        Navigator.pop(context); // Navigate back to profile page
+        ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text('Profile updated successfully')));
+        Navigator.pushReplacement(
+            context, MaterialPageRoute(builder: (context) => ProfilePage()));
       } else {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Failed to update profile')));
+        ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text('Failed to update profile')));
       }
     }
   }
@@ -145,17 +154,23 @@ class _EditProfileState extends State<EditProfile> {
                         ? FileImage(_image!)
                         : (_profileImageUrl != null
                             ? NetworkImage(_profileImageUrl!)
-                            : AssetImage('assets/profile/user.png')) as ImageProvider,
+                            : AssetImage('assets/profile/user.png'))
+                                as ImageProvider,
                   ),
                 ),
                 SizedBox(height: 20),
                 EditProfileWidget.textedit(),
                 SizedBox(height: 20),
-                EditProfileWidget.buildTextField('Nama Panjang', Icons.person_outline, controller: _fullNameController),
-                EditProfileWidget.buildTextField('Tempat Lahir', Icons.location_city, controller: _birthplaceController),
-                EditProfileWidget.buildDateField(context, 'Tanggal Lahir', controller: _birthdateController),
-                EditProfileWidget.buildTextField('Alamat', Icons.home, controller: _addressController),
-                EditProfileWidget.buildTextField('Email', Icons.person, controller: _emailController),    
+                EditProfileWidget.buildTextField('Nama Panjang', Icons.person_outline,
+                    controller: _fullNameController),
+                EditProfileWidget.buildTextField('Tempat Lahir', Icons.location_city,
+                    controller: _birthplaceController),
+                EditProfileWidget.buildDateField(context, 'Tanggal Lahir',
+                    controller: _birthdateController),
+                EditProfileWidget.buildTextField('Alamat', Icons.home,
+                    controller: _addressController),
+                EditProfileWidget.buildTextField('Email', Icons.person,
+                    controller: _emailController),
                 SizedBox(height: 20),
                 EditProfileWidget.saveButton(_saveProfile),
               ],

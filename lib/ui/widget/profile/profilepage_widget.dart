@@ -149,7 +149,7 @@ Widget boxprofile(String? nik, String? gender, String? birthplace) {
   );
 }
 
-Widget nextProfile(String? nik, String? gender, String? birthplace, String? address) {
+Widget nextProfile(String? username, String? birthplace, String? birthdate, String? address) {
   return Container(
     margin: EdgeInsets.symmetric(horizontal: 8),
     child: Column(
@@ -169,7 +169,7 @@ Widget nextProfile(String? nik, String? gender, String? birthplace, String? addr
             children: [
               Expanded(
                 child: Text(
-                  'NIK',
+                  'Username',
                   textAlign: TextAlign.left,
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
@@ -179,7 +179,7 @@ Widget nextProfile(String? nik, String? gender, String? birthplace, String? addr
               ),
               Expanded(
                 child: Text(
-                  nik ?? 'NIK not found',
+                  username ?? 'Username not found',
                   textAlign: TextAlign.right,
                   style: TextStyle(
                     color: Colors.black,
@@ -204,7 +204,7 @@ Widget nextProfile(String? nik, String? gender, String? birthplace, String? addr
             children: [
               Expanded(
                 child: Text(
-                  'Gender',
+                  'Tempat Lahir',
                   textAlign: TextAlign.left,
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
@@ -214,7 +214,7 @@ Widget nextProfile(String? nik, String? gender, String? birthplace, String? addr
               ),
               Expanded(
                 child: Text(
-                  gender ?? 'Gender not found',
+                  birthplace ?? 'Tanggal Lahir not found',
                   textAlign: TextAlign.right,
                   style: TextStyle(
                     color: Colors.black,
@@ -239,7 +239,7 @@ Widget nextProfile(String? nik, String? gender, String? birthplace, String? addr
             children: [
               Expanded(
                 child: Text(
-                  'Birthplace',
+                  'Tanggal Lahir',
                   textAlign: TextAlign.left,
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
@@ -249,7 +249,7 @@ Widget nextProfile(String? nik, String? gender, String? birthplace, String? addr
               ),
               Expanded(
                 child: Text(
-                  birthplace ?? 'Birthplace not found',
+                  birthdate ?? 'Birthdate not found',
                   textAlign: TextAlign.right,
                   style: TextStyle(
                     color: Colors.black,
@@ -295,7 +295,7 @@ Widget editButton(BuildContext context) {
     height: 50,
     child: TextButton(
       onPressed: () {
-        Navigator.push(
+        Navigator.pushReplacement(
           context,
           MaterialPageRoute(
             builder: (context) => EditProfile(),
@@ -312,12 +312,13 @@ Widget editButton(BuildContext context) {
         'Edit Profile',
         style: whiteTextStyle.copyWith(
           color: Colors.white,
-          fontWeight: semibold
+          fontWeight: semibold,
         ),
       ),
     ),
   );
 }
+
 
 Widget logoutButton(BuildContext context) {
   return SizedBox(

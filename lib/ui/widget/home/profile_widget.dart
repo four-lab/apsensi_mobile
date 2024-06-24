@@ -45,7 +45,7 @@ Widget buildProfile(BuildContext context, User user) {
         ),
         GestureDetector(
           onTap: () {
-            Navigator.push(context,
+            Navigator.pushReplacement(context,
                 MaterialPageRoute(builder: (context) => ProfilePage()));
           },
           child: Container(

@@ -54,7 +54,7 @@ class ProfilePage extends StatelessWidget {
                     fotoprofil(user),
                     nama(user.fullname, user.email),
                     boxprofile(user.nik, user.gender, user.birthplace),
-                    nextProfile(user.nik, user.gender, user.birthplace, user.address),
+                    nextProfile(user.username, user.birthplace, user.birthdate, user.address),
                     editButton(context),
                     SizedBox(height: 16),
                     logoutButton(context),
